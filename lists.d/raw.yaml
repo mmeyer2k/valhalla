@@ -1,0 +1,6 @@
+raw:
+
+  # some domains i use for development and nothing else
+  # a good example of how to use raw dnsmasq rules
+  - address=/.cool/192.168.10.10
+  - address=/.test/192.168.10.10

@@ -1,0 +1,12 @@
+interface=enp0s8
+interface=enp0s3
+log-queries
+no-resolv
+no-poll
+addn-hosts=/valhalla/hosts.d
+log-facility=/var/log/dnsmasq/dnsmasq.log
+
+# need cache size to be zero for digest functions to be accurate
+# dnscrypt will provide the cache
+# saves memory too, win/win
+cache-size=0

@@ -1,0 +1,20 @@
+whitelist:
+  - plex.tv
+  - plex.direct
+  - thepiratebay.rocks
+  - youtu.be
+  - redd.it
+  - byobu.co
+
+  # windows time sync
+  - nist.gov
+
+  # uBlock origin needs these i think
+  # but do i even need uBlock anymore?
+  - fanboy.co.nz
+  - easylist.to
+
+  # these sites are handy for viewing a one-off blacklisted domain without changing your rule set
+  # also good for data preservation
+  - archive.fo
+  - archive.is

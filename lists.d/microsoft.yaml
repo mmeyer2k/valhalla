@@ -1,0 +1,33 @@
+# microsoft related domains
+#
+# disables windows update and all cortana crap
+# also disables driver downloads and lots of telemetry stuff
+# there may be some overlap with the default thirdparty blocklists
+blacklist:
+  - microsoft.com
+  - microsoft.org
+  - microsoft.net
+  - windows.com
+  - bing.com
+  - msn.com
+  - microsoft-hohm.com
+  - msedge.net
+  - live.com
+  - office365.com
+  - microsoftonline.com
+  - office.com
+  - outlook.com
+  - windows.net
+  - bing.com
+  - edgesuite.net
+  - t-msedge.net
+  - c-msedge.net
+  - msftconnecttest.com
+  - msftncsi.com
+  - azureedge.net
+  - edgekey.net
+  - nsatc.net
+
+# microsoft things that i do sometimes need
+whitelist:
+  - answers.microsoft.com

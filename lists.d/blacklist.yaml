@@ -1,0 +1,57 @@
+blacklist:
+
+  # software i use but that does not need to be making dns requests to function properly
+  - analytics.atlassian.com
+  - getgreenshot.org
+  - steam-chat.com
+  - studio-htc.com
+  - app-analytics.snapchat.com
+  #- atl-paas.net
+  - intellij.net
+  - api.cryptomator.org
+  
+  # social media and large ecosystems i have no part of
+  - facebook.com
+  - twitter.com
+  - tumblr.com
+  - myspace.com
+  - apple.com
+  - aol.com
+  - yahoo.com
+
+  # garbage i think is generated from apps on my phone. burn it.
+  - splkmobile.com
+  - kgmobi.com
+  - htcsense.com
+  - urbanairship.com
+
+  # junk, ads, diagnostic bloat, sleazebags, creeps
+  # might be some overlap with thirdparty lists
+  # todo: check on ^
+  - advexplore.com
+  - kinja-static.com
+  - typekit.net
+  - qq.com
+  - mparticle.com
+  - leanplum.com
+  - adrta.com
+  - comcast.net
+  - senderbase.org
+  - team-cymru.com
+  - statcounter.com
+  - xpanama.net
+  - adf.ly
+  - newrelic.com
+  - mixpanel.com
+  - exceptionless.io
+  - vwo.com
+  - visualwebsiteoptimizer.com
+  - smaato.net
+  - mojiva.com
+  - adinfuse.com
+  - outbrain.com
+  - optimizely.com
+  - hs-analytics.net
+  - salmonads.com
+  - crashlytics.com
+  - amazon-adsystem.com

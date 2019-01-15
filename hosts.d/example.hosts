@@ -1,0 +1,5 @@
+# typical host entries can be loaded here
+# hosts.d/ is loaded by dnsmasq with the addn-hosts option
+
+127.0.0.1 one.com
+127.0.0.1 two.com three.com

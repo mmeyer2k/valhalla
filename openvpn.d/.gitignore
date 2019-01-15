@@ -1,0 +1,5 @@
+*.ovpn
+*.auth
+*.zip
+!openvpn.auth
+!openvpn.ovpn

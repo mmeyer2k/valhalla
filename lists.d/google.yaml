@@ -1,0 +1,22 @@
+# known google affiliated domains and how to handle them
+# i plan to transition to more of a whitelist only approach but i use them for too much right now
+whitelist:
+
+blacklist:
+  - admob.net
+  - adsense.net
+  - adwords.net
+  - doubleclick.net
+  - googleanalytics.net
+  - google-analytics.net
+  - googletagmanager.net
+  - adservice.google.com
+  - android.clients.google.com
+  - clientservices.googleapis.com
+  - connectivitycheck.gstatic.com
+  - fonts.google.com
+  - fonts.gstatic.com
+  - fonts.googleapis.com
+  - plus.l.google.com
+  - gvt1.com
+  - clients.l.google.com

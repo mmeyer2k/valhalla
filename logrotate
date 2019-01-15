@@ -1,0 +1,8 @@
+/var/log/dnsmasq/dnsmasq.log {
+  rotate 30
+  daily
+  nocompress
+  missingok
+  notifempty
+  copytruncate
+}
