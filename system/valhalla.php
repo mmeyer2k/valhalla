@@ -140,13 +140,13 @@ switch ($command) {
         file_put_contents('/etc/dnsmasq.d/rules', implode("\r\n", $rules));
 
         # link configs
-        `ln -svf $dir/dnsmasq /etc/dnsmasq.d/valhalla`;
+        `ln -svf $dir/../system/dnsmasq /etc/dnsmasq.d/valhalla`;
 
         # restart proxy
         `service dnsmasq restart`;
 
         # re-register cron file
-        `crontab $dir/crontab`;
+        `crontab $dir/../system/crontab`;
 
         # show finishing message
         colorLine("dns rules rebuilt successfully in [$mode] mode!", 2);
@@ -188,10 +188,10 @@ switch ($command) {
         }
 
         # add/overwrite systemd start file
-        `cp -fv /valhalla/system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
+        `cp -fv $dir/../system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
 
         # link openvpn to new config
-        `cp -f /valhalla/openvpn.d/$vpn /etc/openvpn/client/openvpn.ovpn`;
+        `cp -f $dir/../openvpn.d/$vpn /etc/openvpn/client/openvpn.ovpn`;
 
         # see if authentication is configured properly
         $c = file_get_contents("/etc/openvpn/client/openvpn.ovpn");
@@ -337,7 +337,7 @@ function numericOpenvpnConfigList(): array
 {
     $ret = [];
 
-    foreach (scandir(__DIR__ . '/openvpn.d') as $f) {
+    foreach (scandir(__DIR__ . '/../openvpn.d') as $f) {
         if (strpos($f, '.ovpn') !== false) {
             $ret[] = basename($f);
         }
@@ -350,7 +350,7 @@ function numericOpenvpnAuthList(): array
 {
     $ret = [];
 
-    foreach (scandir(__DIR__ . '/openvpn.d') as $f) {
+    foreach (scandir(__DIR__ . '/../openvpn.d') as $f) {
         if (strpos($f, '.auth') !== false) {
             $ret[] = basename($f);
         }
@@ -370,9 +370,9 @@ function parseListsDotD(): array
 {
     $lists = [];
 
-    foreach (scandir(__DIR__ . '/lists.d') as $f) {
+    foreach (scandir(__DIR__ . '/../lists.d') as $f) {
         if (pathinfo($f, PATHINFO_EXTENSION) === 'yaml') {
-            $parsed = yaml_parse_file(__DIR__ . "/lists.d/$f");
+            $parsed = yaml_parse_file(__DIR__ . "/../lists.d/$f");
             $lists = array_merge_recursive($lists, $parsed);
         }
     }
