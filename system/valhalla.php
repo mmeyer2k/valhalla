@@ -2,7 +2,7 @@
 
 $command = $argv[1] ?? null;
 $dir = __DIR__;
-$yaml = yaml_parse_file(__DIR__ . '/valhalla.yaml');
+$yaml = yaml_parse_file(__DIR__ . '/../valhalla.yaml');
 
 switch ($command) {
     case '3p':
