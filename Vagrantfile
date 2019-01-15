@@ -40,7 +40,6 @@ Vagrant.configure("2") do |config|
     apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack
     apt remove -y snapd
-    echo 'aGFyZHN0YXR1cyBhbHdheXNsYXN0bGluZQpoYXJkc3RhdHVzIHN0cmluZyAnJXs9IGtHfVsgJXtHfSVIICV7Z31dWyU9ICV7PSBrd30lPyUtTHclPyV7cn0oJXtXfSVuKiVmJXQlPygldSklPyV7cn0pJXt3fSU/JStMdyU/JT8lPSAle2d9XVsle0J9ICVtLSVkICV7V30lYyAle2d9XScKCg==' | base64 -d | tee /home/vagrant/.screenrc > /root/.screenrc
   SHELL
 
   cfg = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
@@ -82,13 +81,31 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.provision "shell", name: "configure ufw", inline: <<-SHELL
+	yes | ufw reset
+	ufw default deny incoming
+	ufw default allow outgoing
+	ufw allow 22
+	ufw allow 53
+	ufw allow 8888
+	ufw logging on
+	ufw enable
+  SHELL
+  
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+	byobu-enable
+  SHELL
+  
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
+	
+    # link bashrc file in repo to one in profile
+    cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
+	
     # build rulesets
     php /valhalla/system/valhalla.php 3p
     php /valhalla/system/valhalla.php build
 
-    # link bashrc file in repo to one in profile
-    cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
+	byobu-enable
 
     # display banner message
     figlet valhalla

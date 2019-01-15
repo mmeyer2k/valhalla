@@ -188,7 +188,7 @@ switch ($command) {
         }
 
         # add/overwrite systemd start file
-        `cp -fv $dir/../system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
+        `cp -f $dir/../system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
 
         # link openvpn to new config
         `cp -f $dir/../openvpn.d/$vpn /etc/openvpn/client/openvpn.ovpn`;
