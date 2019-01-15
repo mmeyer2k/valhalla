@@ -1,1 +1,0 @@
-0 0 * * * php /valhalla/valhalla.php 3p ; service dnsmasq restart

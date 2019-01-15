@@ -146,7 +146,7 @@ switch ($command) {
         `service dnsmasq restart`;
 
         # re-register cron file
-        `crontab $dir/crontab`;
+        `crontab $dir/system/crontab`;
 
         # show finishing message
         colorLine("dns rules rebuilt successfully in [$mode] mode!", 2);
@@ -188,7 +188,7 @@ switch ($command) {
         }
 
         # add/overwrite systemd start file
-        `cp -fv /valhalla/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
+        `cp -fv /valhalla/system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
 
         # link openvpn to new config
         `cp -f /valhalla/openvpn.d/$vpn /etc/openvpn/client/openvpn.ovpn`;

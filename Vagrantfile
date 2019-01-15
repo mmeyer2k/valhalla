@@ -63,14 +63,14 @@ Vagrant.configure("2") do |config|
 
   if settings.has_key?("vpnconf")
     config.vm.provision "shell", name: "rigging openvpn for silent running", args: [settings["vpnconf"], settings["vpnauth"]], inline: <<-SHELL
-      php /valhalla/valhalla.php vpn $1 $2
+      php /valhalla/system/valhalla.php vpn $1 $2
       service openvpn-client restart
     SHELL
   end
 
   config.vm.provision "shell", name: "configure logrotate", inline: <<-SHELL
     mkdir -p /var/log/dnsmasq ; chown dnsmasq:root /var/log/dnsmasq
-    cp -f /valhalla/logrotate /etc/logrotate.d/dnsmasq
+    cp -f /valhalla/system/logrotate /etc/logrotate.d/dnsmasq
     chmod 644 /etc/logrotate.d/dnsmasq
   SHELL
 
@@ -84,11 +84,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
     # build rulesets
-    php /valhalla/valhalla.php 3p
-    php /valhalla/valhalla.php build
+    php /valhalla/system/valhalla.php 3p
+    php /valhalla/system/valhalla.php build
 
     # link bashrc file in repo to one in profile
-    cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/.bashrc' >> /home/vagrant/.bashrc
+    cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
 
     # display banner message
     figlet valhalla
