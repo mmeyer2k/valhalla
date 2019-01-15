@@ -146,7 +146,7 @@ switch ($command) {
         `service dnsmasq restart`;
 
         # re-register cron file
-        `crontab $dir/system/crontab`;
+        `crontab $dir/crontab`;
 
         # show finishing message
         colorLine("dns rules rebuilt successfully in [$mode] mode!", 2);
