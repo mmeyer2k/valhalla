@@ -5,7 +5,7 @@
 are you sitting down?
 valhalla combines a range of technologies to provide an amazing increase in the privacy and security of your entire local network.
 at its core, the primary functions of valhalla are:
-- to provide a lan accessable dns server with highly customizable white and black lists
+- to provide a lan accessible dns server with highly customizable white and black lists
 - to use dnscrypt to securely forward dns queries over https
 - to (optionally) forward all internet-bound traffic from the vm through a vpn server for extra privacy
 - to present an open http proxy that any computer can use, which allows them to take advantage of the dns rules and vpn tunnel (if used)
