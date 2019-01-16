@@ -82,14 +82,14 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", name: "configure ufw", inline: <<-SHELL
-	yes | ufw reset
-	ufw default deny incoming
-	ufw default allow outgoing
-	ufw allow 22
-	ufw allow 53
-	ufw allow 8888
-	ufw logging on
-	ufw enable
+    yes | ufw reset
+    ufw default deny incoming
+    ufw default allow outgoing
+    ufw allow 22
+    ufw allow 53
+    ufw allow 8888
+    ufw logging on
+    ufw enable
   SHELL
   
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
@@ -97,7 +97,6 @@ Vagrant.configure("2") do |config|
   SHELL
   
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
-	
     # link bashrc file in repo to one in profile
     cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
 	
@@ -105,7 +104,8 @@ Vagrant.configure("2") do |config|
     php /valhalla/system/valhalla.php 3p
     php /valhalla/system/valhalla.php build
 
-	byobu-enable
+    # enable byobu for root user
+    byobu-enable
 
     # display banner message
     figlet valhalla
