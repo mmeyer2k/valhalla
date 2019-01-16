@@ -1,5 +1,5 @@
-# typical host entries can be loaded here
-# hosts.d/ is loaded by dnsmasq with the addn-hosts option
+# typical host formatted files can be added to hosts.d/
+# all files in hosts.d/ are loaded by dnsmasq from the addn-hosts option
 
 127.0.0.1 one.com
 127.0.0.1 two.com three.com
