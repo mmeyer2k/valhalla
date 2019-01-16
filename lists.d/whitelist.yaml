@@ -7,6 +7,7 @@ whitelist:
   - redd.it
   - byobu.co
   - mmeyer2k.github.io
+  - circle.ci
 
   # windows time sync
   - nist.gov
