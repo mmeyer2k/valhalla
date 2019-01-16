@@ -18,12 +18,14 @@ blacklist:
   - apple.com
   - aol.com
   - yahoo.com
+  - linkedin.com
 
   # garbage i think is generated from apps on my phone. burn it.
   - splkmobile.com
   - kgmobi.com
   - htcsense.com
   - urbanairship.com
+  - studio-htc.com
 
   # junk, ads, diagnostic bloat, sleazebags, creeps
   # might be some overlap with thirdparty lists
@@ -55,3 +57,8 @@ blacklist:
   - salmonads.com
   - crashlytics.com
   - amazon-adsystem.com
+  - zopim.com
+  - zendesk.com
+  - wp.com
+  - flurry.com
+

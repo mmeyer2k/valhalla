@@ -20,3 +20,5 @@ blacklist:
   - plus.l.google.com
   - gvt1.com
   - clients.l.google.com
+  - play.google.com
+  - plus.google.com

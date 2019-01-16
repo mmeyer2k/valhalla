@@ -7,8 +7,6 @@ whitelist:
   - com
   - net
   - org
-  - io
-
 # any tlds that you wish to be blackholed in loose mode can go here
 # i usually run in tight mode so i have none
 blacklist:
