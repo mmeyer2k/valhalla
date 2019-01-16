@@ -8,6 +8,7 @@ whitelist:
   - byobu.co
   - mmeyer2k.github.io
   - circle.ci
+  - trasnfer.sh
 
   # windows time sync
   - nist.gov
