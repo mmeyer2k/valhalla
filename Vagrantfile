@@ -93,7 +93,7 @@ Vagrant.configure("2") do |config|
   SHELL
   
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-	byobu-enable
+    byobu-enable
   SHELL
   
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
