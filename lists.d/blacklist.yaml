@@ -30,6 +30,7 @@ blacklist:
   # junk, ads, diagnostic bloat, sleazebags, creeps
   # might be some overlap with thirdparty lists
   # todo: check on ^
+  - cnet.com
   - advexplore.com
   - kinja-static.com
   - typekit.net
