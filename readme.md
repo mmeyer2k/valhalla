@@ -105,10 +105,10 @@ These modes do not affect items in the `hosts.d` directory or third-party rule s
 ### `vpn`
 `usage: valhalla vpn [config] [auth]`
 
-`vpn` will switch your vpn connection with a single command based on configuration files in your `openvpn.d/` folder.
-
-`vpn` takes two parameters `conf` and `auth`
+Use the`vpn` command to switch your vpn connection.
 Leave both options blank to view a numerical list of configs and auths.
+
+The `vpn` command takes two parameters `conf` and `auth`.
 If server does not require authentication then auth argument can be omitted.
 Either the numerical list number or the file name can be used on the command line.
 
@@ -143,6 +143,7 @@ valhalla digest queried | less
 
 Redownload third-party blocklists and restart dnsmasq.
 This command is scheduled to run once per day.
+Please see [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists).
 
 ### `stress`
 `usage: valhalla stress`
@@ -162,7 +163,6 @@ So why use valhalla?
 - allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
 - simple to configure and switch vpn servers
 - uses dnscrypt and dnssec without extra steps
-- all you need is virtualbox + vagrant
 - very small project well suited for forking
 - hate windows update? hate cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
 - don't need to trust client software from shady vpn companies, just use their openvpn config files
@@ -175,9 +175,11 @@ So why use valhalla?
 Who needs a fancy dashboard when you have `byobu`?
 
 Valhalla ships with a lot of popular monitoring tools so you can easily visualize your network traffic.
-- nload
-- iftop / htop
 - tcptrack
+- vnstat
+- nload
+- iftop 
+- htop
 
 You will find that many things you use will break when you apply strict dns rules.
 It is helpful to be able to quickly determine if your dns packets are being dropped.
