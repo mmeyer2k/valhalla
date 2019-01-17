@@ -287,7 +287,7 @@ function printHelp()
     passthru("tput setaf 2 ; figlet valhalla ; tput sgr0");
 
     echo <<<EOT
-* a highly configurable dns caching tunneling proxy virtual server
+* a highly configurable dns caching virtual server
 *
 * https://github.com/mmeyer2k/valhalla#command-line-interface
 * all bracketed parameters are optional
