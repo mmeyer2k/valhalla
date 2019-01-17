@@ -77,64 +77,9 @@ switch ($command) {
     case 'build':
     case 'bu':
     case 'b':
-
-        // Get the name server address for dnscrypt
-        $ns = '127.0.2.1';
-
         $mode = $argv[2] ?? $yaml["mode"] ?? null;
 
-        switch ($mode) {
-            case 'tight':
-            case 'ti':
-            case 't':
-                $mode = 'tight';
-                break;
-
-            case 'loose':
-            case 'lo':
-            case 'l':
-                $mode = 'loose';
-                break;
-
-            case 'off':
-            case 'of':
-            case 'o':
-                $mode = 'off';
-                break;
-
-            default:
-                abort("invalid mode type");
-        }
-
-        $rules = [];
-
-        # begin parsing rulesets unless we are in off mode
-        if ($mode !== 'off') {
-            $lists = parseListsDotD();
-            if ($mode === 'tight') {
-                foreach (($lists['whitelist'] ?? []) as $row) {
-                    if (trim($row)) {
-                        $rules[] = "server=/.$row/$ns";
-                    }
-                }
-            }
-            foreach (($lists['blacklist'] ?? []) as $row) {
-                if (trim($row)) {
-                    $rules[] = "address=/.$row/0.0.0.0";
-                    $rules[] = "address=/.$row/::";
-                }
-            }
-        }
-
-        # inject raw dnsmasq config statements
-        foreach (($lists['raw'] ?? []) as $row) {
-            $rules[] = $row;
-        }
-
-        # add the blackhole for all non-matching
-        if ($mode === 'tight') {
-            $rules[] = "address=/#/0.0.0.0";
-        }
+        $rules = buildDnsmasqRules($mode);
 
         # save finalized ruleset
         file_put_contents('/etc/dnsmasq.d/rules', implode("\r\n", $rules));
@@ -222,7 +167,7 @@ switch ($command) {
     case 'd':
         $arg = $argv[2] ?? 'allowed';
         $logfile = '/var/log/dnsmasq/dnsmasq.log';
-		
+
         switch ($arg) {
             case 'allowed':
             case 'al':
@@ -378,4 +323,62 @@ function parseListsDotD(): array
     }
 
     return $lists;
+}
+
+function buildDnsmasqRules(string $mode): array
+{
+    switch ($mode) {
+        case 'tight':
+        case 'ti':
+        case 't':
+            $mode = 'tight';
+            break;
+
+        case 'loose':
+        case 'lo':
+        case 'l':
+            $mode = 'loose';
+            break;
+
+        case 'off':
+        case 'of':
+        case 'o':
+            $mode = 'off';
+            break;
+
+        default:
+            abort("invalid mode type");
+    }
+
+    $rules = [];
+
+    # begin parsing rulesets unless we are in off mode
+    if ($mode !== 'off') {
+        $lists = parseListsDotD();
+        if ($mode === 'tight') {
+            foreach (($lists['whitelist'] ?? []) as $row) {
+                if (trim($row)) {
+                    $rules[] = "server=/.$row/127.0.2.1";
+                }
+            }
+        }
+        foreach (($lists['blacklist'] ?? []) as $row) {
+            if (trim($row)) {
+                $rules[] = "address=/.$row/0.0.0.0";
+                $rules[] = "address=/.$row/::";
+            }
+        }
+    }
+
+    # inject raw dnsmasq config statements
+    foreach (($lists['raw'] ?? []) as $row) {
+        $rules[] = $row;
+    }
+
+    # add the blackhole for all non-matching
+    if ($mode === 'tight') {
+        $rules[] = "address=/#/0.0.0.0";
+    }
+
+    return $rules;
 }
