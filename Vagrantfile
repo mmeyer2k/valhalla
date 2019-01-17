@@ -97,12 +97,12 @@ Vagrant.configure("2") do |config|
   SHELL
   
   if settings.has_key?("ip")
-    config.vm.provision "shell", name: "obtain ips for display", inline: <<-SHELL
+    config.vm.provision "shell", run: "always", name: "obtain ips for display", inline: <<-SHELL
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link' | cut -d' ' -f 2 > /var/tmp/ip6
     SHELL
   else
-    config.vm.provision "shell", name: "configure ufw", inline: <<-SHELL
+    config.vm.provision "shell", run: "always", name: "obtain ips for display", inline: <<-SHELL
       echo '127.0.0.1' > /var/tmp/ip4
       echo '::1' > /var/tmp/ip6
     SHELL
