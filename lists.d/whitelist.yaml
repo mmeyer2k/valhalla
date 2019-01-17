@@ -7,7 +7,7 @@ whitelist:
   - redd.it
   - byobu.co
   - circle.ci
-  - trasnfer.sh
+  - transfer.sh
 
   # windows time sync
   - nist.gov
