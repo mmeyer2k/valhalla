@@ -96,6 +96,18 @@ Vagrant.configure("2") do |config|
     byobu-enable
   SHELL
   
+  if settings.has_key?("ip")
+    config.vm.provision "shell", name: "obtain ips for display", inline: <<-SHELL
+      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
+      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link' | cut -d' ' -f 2 > /var/tmp/ip6
+    SHELL
+  else
+    config.vm.provision "shell", name: "configure ufw", inline: <<-SHELL
+      echo '127.0.0.1' > /var/tmp/ip4
+      echo '::1' > /var/tmp/ip6
+    SHELL
+  end
+  
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
     # link bashrc file in repo to one in profile
     cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
@@ -115,5 +127,10 @@ Vagrant.configure("2") do |config|
     echo '*'
     echo '* https://github.com/mmeyer2k/valhalla'
     echo '*'
+    echo '* ipv4 address:' $(cat /var/tmp/ip4)
+    echo '* ipv6 address:' $(cat /var/tmp/ip6)
+	echo '*'
+	echo '* http proxy port: 8888'
+	echo '* dns resolver port: 53'
   SHELL
 end
