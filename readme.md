@@ -7,7 +7,7 @@ Valhalla combines a range of technologies to provide an amazing increase in the 
 At its core, the primary functions of valhalla are:
 - to provide a LAN accessible dns server with highly customizable white and black lists
 - to use dnscrypt to securely forward dns queries over HTTPS
-- to (optionally) forward all internet-bound traffic from the vm through a vpn server for extra privacy
+- to (optionally) forward all internet-bound traffic from the vm through a VPN server for extra privacy
 - to present an open HTTP proxy that any computer can use, which allows them to take advantage of the dns rules and vpn tunnel (if used)
 - to use continuously updated copies of the very good blocklists at [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) to block spam, ads, malware, telemetry and tons of other garbage
 - to be able to quickly switch between three ruleset strictness modes
@@ -26,7 +26,7 @@ If you want to use this for yourself, start by making your own fork/clone.
 In the future I may work to make this more universal, but for now this should be considered a demonstration of what is possible.
 Pull requests are welcome nonetheless!
 
-**valhalla is meant to be run on your local network and not exposed to the internet, as it would act as an open dns resolver and open HTTP proxy!**
+**valhalla is meant to be run on your local network and not exposed to the internet, as it would act as an open DNS resolver and open HTTP proxy!**
 
 ### Creating rules
 

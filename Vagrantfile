@@ -7,19 +7,14 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
   config.vm.hostname = hostname
   config.ssh.forward_agent = true
-  config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
-  config.vm.network "forwarded_port", guest: 8888, host: 8888, protocol: "tcp"
   config.vm.synced_folder "./", "/valhalla"
 
-  if settings.has_key?("ip")
+  if settings.include? "ip"
     config.vm.network "public_network", ip: settings["ip"]
+    config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
+    config.vm.network "forwarded_port", guest: 8888, host: 8888, protocol: "tcp"
   else
     config.vm.network "private_network", type: "dhcp"
-  end
-
-  if Vagrant.has_plugin?("vagrant-hostsupdater")
-    config.hostsupdater.aliases = [hostname]
-    config.hostsupdater.ips = [settings["ip"] ||= '127.0.0.1']
   end
 
   config.vm.provider :virtualbox do |vb|
@@ -60,7 +55,7 @@ Vagrant.configure("2") do |config|
     service squid restart
   SHELL
 
-  if settings.has_key?("vpnconf")
+  if settings.include? "vpnconf"
     config.vm.provision "shell", name: "rigging openvpn for silent running", args: [settings["vpnconf"], settings["vpnauth"]], inline: <<-SHELL
       php /valhalla/system/valhalla.php vpn $1 $2
       service openvpn-client restart
@@ -95,14 +90,14 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     byobu-enable
   SHELL
-  
-  if settings.has_key?("ip")
-    config.vm.provision "shell", run: "always", name: "obtain ips for display", inline: <<-SHELL
+
+  if settings.include? "ip"
+    config.vm.provision "shell", run: "always", name: "obtain dhcp ips for display", inline: <<-SHELL
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link' | cut -d' ' -f 2 > /var/tmp/ip6
     SHELL
   else
-    config.vm.provision "shell", run: "always", name: "obtain ips for display", inline: <<-SHELL
+    config.vm.provision "shell", run: "always", name: "obtain bridge ips for display", inline: <<-SHELL
       echo '127.0.0.1' > /var/tmp/ip4
       echo '::1' > /var/tmp/ip6
     SHELL
@@ -132,5 +127,6 @@ Vagrant.configure("2") do |config|
 	echo '*'
 	echo '* http proxy port: 8888'
 	echo '* dns resolver port: 53'
+	echo '*'
   SHELL
 end
