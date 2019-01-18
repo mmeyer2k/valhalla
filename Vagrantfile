@@ -62,6 +62,9 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
+  # set up the firewall options
+  config.vm.provision "shell", name: "configure ufw", path: "./system/firewall.sh"
+
   config.vm.provision "shell", name: "configure logrotate", inline: <<-SHELL
     mkdir -p /var/log/dnsmasq ; chown dnsmasq:root /var/log/dnsmasq
     cp -f /valhalla/system/logrotate /etc/logrotate.d/dnsmasq
@@ -75,17 +78,6 @@ Vagrant.configure("2") do |config|
       s.args = [File.read(File.expand_path("~/.ssh/id_rsa.pub"))]
     end
   end
-
-  config.vm.provision "shell", name: "configure ufw", inline: <<-SHELL
-    yes | ufw reset
-    ufw default deny incoming
-    ufw default allow outgoing
-    ufw allow 22
-    ufw allow 53
-    ufw allow 8888
-    ufw logging on
-    ufw enable
-  SHELL
   
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     byobu-enable

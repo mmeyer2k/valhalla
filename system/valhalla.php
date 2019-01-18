@@ -82,7 +82,7 @@ switch ($command) {
         $rules = buildDnsmasqRules($mode);
 
         # save finalized ruleset
-        file_put_contents('/etc/dnsmasq.d/rules', implode("\r\n", $rules));
+        file_put_contents('/etc/dnsmasq.d/rules', $rules);
 
         # link configs
         `ln -svf $dir/../system/dnsmasq /etc/dnsmasq.d/valhalla`;
@@ -101,10 +101,43 @@ switch ($command) {
     case 'vpn':
     case 'vp':
     case 'v':
-        $vpn = $argv[2] ?? null;
+        $conf = $argv[2] ?? null;
+        $auth = $argv[3] ?? null;
+
+        // Handle the vpn locking feature
+        if ($conf === 'lock') {
+            switch ($auth) {
+                case 'enabled':
+                case 'en':
+                case 'e':
+                    passthru("sh $dir/firewall.sh --vpn-lock");
+
+                    break;
+
+                case 'disabled':
+                case 'di':
+                case 'd':
+                    passthru("sh $dir/firewall.sh");
+
+                    break;
+
+                default:
+                    $vpnstatus = vpnLockStatus();
+
+                    echo <<<EOT
+vpnlock status: $vpnstatus
+
+EOT;
+
+
+                    break;
+            }
+
+            break;
+        }
 
         # list vpn configs
-        if ($vpn === null) {
+        if ($conf === null) {
             colorLine('listing available vpn configuration(s) in valhalla/openvpn.d...', 2);
 
             foreach (numericOpenvpnConfigList() as $i => $v) {
@@ -124,24 +157,23 @@ switch ($command) {
             break;
         }
 
-        if (is_numeric($vpn)) {
-            $vpn = numericOpenvpnConfigList()[$vpn];
+        if (is_numeric($conf)) {
+            $conf = numericOpenvpnConfigList()[$conf];
         }
 
-        if (!file_exists("/valhalla/openvpn.d/$vpn")) {
-            abort("openvpn config file [$vpn] does not exist!");
+        if (!file_exists("/valhalla/openvpn.d/$conf")) {
+            abort("openvpn config file [$conf] does not exist!");
         }
 
         # add/overwrite systemd start file
         `cp -f $dir/../system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
 
         # link openvpn to new config
-        `cp -f $dir/../openvpn.d/$vpn /etc/openvpn/client/openvpn.ovpn`;
+        `cp -f $dir/../openvpn.d/$conf /etc/openvpn/client/openvpn.ovpn`;
 
         # see if authentication is configured properly
         $c = file_get_contents("/etc/openvpn/client/openvpn.ovpn");
         if (strpos($c, 'auth-user-pass') !== false) {
-            $auth = $argv[3] ?? null;
             if ($auth !== null) {
                 $f = is_numeric($auth) ? numericOpenvpnAuthList()[$auth] : $auth;
                 `sed -i 's|auth-user-pass.*|auth-user-pass $f |' /etc/openvpn/client/openvpn.ovpn`;
@@ -158,7 +190,7 @@ switch ($command) {
         # restart service
         `service openvpn-client restart`;
 
-        colorLine("switched to vpn: $vpn", 2);
+        colorLine("switched to vpn: $conf", 2);
 
         break;
 
@@ -231,23 +263,36 @@ function printHelp()
 {
     passthru("tput setaf 2 ; figlet valhalla ; tput sgr0");
 
+    $vpnstatus = vpnLockStatus();
+
     echo <<<EOT
 * a highly configurable dns caching virtual server
 *
+* vpn lock status: $vpnstatus
+*
 * https://github.com/mmeyer2k/valhalla#command-line-interface
-* all bracketed parameters are optional
-* supported commands:
 *
 * valhalla 
-*     build  [tight, loose, off]
-*     digest [allowed, denied, queried, clients] [past]
-*     log    [dnsmasq, squid, clear, rotate] [past]
-*     vpn    [conf] [auth]
+*     build   [tight, loose, off]
+*     digest  [allowed, denied, queried, clients] [past]
+*     log     [dnsmasq, squid, clear, rotate] [past]
+*     vpn     [conf] [auth]
 *     stress
 *     3p
 *     help
 
 EOT;
+}
+
+function vpnLockStatus()
+{
+
+    $vpnlock = file_exists('/var/tmp/vpnlock') ? 'on' : 'off';
+    $vpnlockcolor = $vpnlock === 'on' ? "\033[0;32m" : "\033[0;31m";
+    $bold = "\033[1m";
+    $clear = "\033[0m";
+
+    return "{$vpnlockcolor}{$bold}{$vpnlock}{$clear}";
 }
 
 function colorLine(string $msg, ?int $font = null, ?int $bg = null)
@@ -262,7 +307,7 @@ function colorLine(string $msg, ?int $font = null, ?int $bg = null)
         $pre .= "tput setab $bg;";
     }
 
-    passthru("$pre echo '$msg'; tput sgr0");
+    passthru("$pre echo '$msg' ; tput sgr0");
 }
 
 function removeLines(array $input): array
@@ -291,6 +336,11 @@ function numericOpenvpnConfigList(): array
     return $ret;
 }
 
+/**
+ * get flat array of openvpn authorization files in openvpn.d/
+ *
+ * @return array
+ */
 function numericOpenvpnAuthList(): array
 {
     $ret = [];
@@ -325,7 +375,13 @@ function parseListsDotD(): array
     return $lists;
 }
 
-function buildDnsmasqRules(string $mode): array
+/**
+ * turns the yaml files lists.d into dnsmasq rules file string
+ *
+ * @param string $mode
+ * @return string
+ */
+function buildDnsmasqRules(string $mode): string
 {
     switch ($mode) {
         case 'tight':
@@ -380,5 +436,5 @@ function buildDnsmasqRules(string $mode): array
         $rules[] = "address=/#/0.0.0.0";
     }
 
-    return $rules;
+    return implode("\r\n", $rules);
 }
