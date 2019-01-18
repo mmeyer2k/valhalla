@@ -10,6 +10,7 @@ yes | ufw reset
 
 # set outbound rules
 if [ "$1" = "--vpn-lock" ]; then
+    ufw default deny outgoing
     ufw allow out on tun0 from any to any
     touch /var/tmp/vpnlock
 else
