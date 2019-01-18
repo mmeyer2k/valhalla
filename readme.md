@@ -3,36 +3,34 @@
 ![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/topology.png?raw=true)
 
 Are you sitting down?
-Valhalla combines a range of technologies to provide an amazing increase in the privacy and security of your entire local network.
+Valhalla combines a range of technologies to provide secure and rapid DNS delivery for your entire network.
 At its core, the primary functions of valhalla are:
-- to provide a LAN accessible dns server with highly customizable white and black lists
-- to use dnscrypt to securely forward dns queries over HTTPS
-- to (optionally) forward all internet-bound traffic from the vm through a VPN server for extra privacy
-- to present an open HTTP proxy that any computer can use, which allows them to take advantage of the dns rules and vpn tunnel (if used)
-- to use continuously updated copies of the very good blocklists at [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) to block spam, ads, malware, telemetry and tons of other garbage
-- to be able to quickly switch between three ruleset strictness modes
+- to provide a LAN accessible DNS server with highly customizable white and black lists
+- to use dnscrypt to securely forward DNS queries over HTTPS
+- to (optionally) forward all internet-bound traffic from the VM through a VPN server for extra privacy
+- to present an open HTTP proxy that any computer can use, which allows them to take advantage of the DNS rules and VPN tunnel simultaneously
+- to use continuously updated copies of the very good blocklists at [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) to block spam, ads, malware, telemetry and other garbage
 - to be able to run as a minimalist virtual machine for portability
 - to provide a robust commandline interface to control the system
-- to support IPv6
 
 The basic technology stack is: ubuntu + dnsmasq + dnscrypt + dnssec + openvpn + squid + vagrant
 
 ## How to get started with valhalla
 
-This project is my personal dns server builder.
+This project is my personal DNS server builder.
 It is written for my own situation and preferences.
 If you want to use this for yourself, start by making your own fork/clone.
 
 In the future I may work to make this more universal, but for now this should be considered a demonstration of what is possible.
 Pull requests are welcome nonetheless!
 
-**valhalla is meant to be run on your local network and not exposed to the internet, as it would act as an open DNS resolver and open HTTP proxy!**
+**Valhalla is meant to be run on your local network and not exposed to the internet, as it would act as an open DNS resolver and open HTTP proxy!**
 
 ### Creating rules
 
 #### The `lists.d` directory
 
-Yaml formatted rules files can be placed into this folder. 
+Yaml formatted rules files can be placed into `lists.d/`. 
 Any file with a `.yaml` extension will be parsed in lexical order and its options will be merged.
 Each file can contain any of the following arrays: `whitelist`, `blacklist` and `raw`.
 
@@ -53,13 +51,13 @@ raw:
 
 #### The `hosts.d` directory
 
-Additional hosts files can be loaded into dnsmasq at start up by putting them in this folder.
+Additional hosts files can be loaded into dnsmasq at start up by putting them in the `hosts.d/` directory.
 
 ### Basic configuration
 
-Very general settings are stored in `vagrant.yaml`.
-Tthe settings in this file are described [here](https://github.com/mmeyer2k/valhalla/blob/master/docs/configuration.md).
+General settings used to start the VM are stored in `vagrant.yaml`.
 
+Read more about these settings here [here](https://github.com/mmeyer2k/valhalla/blob/master/docs/configuration.md).
 
 ### Starting the vm
 Run `vagrant up`.
@@ -82,13 +80,14 @@ For example `valhalla log squid`, `v l s` and `va lo sq` are identical.
 ### `log`
 `usage: valhalla log [dnsmasq, squid, clear, rotate] [past]`
 
-Use `log` to tail log files.
+Use the `log` command to tail log files in real time.
 Second parameter is optional and determines which program's log to watch.
 Default is `dnsmasq`.
 
-Optional `past` parameter will decompress and display logs that have already been rotated.
+Optional `past` parameter will output logs that have already been rotated.
 
 `clear` will clear out the logs of `dnsmasq` and `squid` along with all rotated histories.
+
 `rotate` will force the logs to rotate.
 
 ### `build`
@@ -141,7 +140,7 @@ valhalla digest queried | less
 ### `3p`
 `usage: valhalla 3p`
 
-Redownload third-party blocklists and restart dnsmasq.
+Re-download third-party blocklists and restart dnsmasq.
 This command is scheduled to run once per day.
 Please see [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists).
 
@@ -158,15 +157,15 @@ I had already heard about pihole, but pihole has lots of limitations and a large
 It does not support dnscrypt automatically and requires many extra steps to enable.
 
 So why use valhalla?
-- literally zero configuration out of the box if not using vpn
+- literally zero configuration out of the box if not using vpn mode
 - docker is hip but vagrant works just fine you freakin' hipsters
 - allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
 - simple to configure and switch vpn servers
 - uses dnscrypt and dnssec without extra steps
 - very small project well suited for forking
 - hate windows update? hate cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
-- don't need to trust client software from shady vpn companies, just use their openvpn config files
-- revision control your dns rules instead of sticking them in your pihole
+- don't need to trust client software from shady VPN companies, just use their openvpn config files
+- revision control your DNS rules instead of sticking them in your pihole
 - pihole does not allow raw dnsmasq entries
 
 ## monitoring
