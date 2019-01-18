@@ -29,6 +29,8 @@ ufw allow 22
 ufw allow 53
 ufw allow 80
 ufw allow 1080
+
+# enable logs
 ufw logging on
 
 # re-enable the firewall
