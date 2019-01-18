@@ -17,7 +17,7 @@ The basic technology stack is: ubuntu + dnsmasq + dnscrypt + dnssec + openvpn + 
 
 ## How to get started with valhalla
 
-This project is my personal DNS server builder.
+This project is my own personal DNS server builder.
 It is written for my own situation and preferences.
 If you want to use this for yourself, start by making your own fork/clone.
 
@@ -154,13 +154,14 @@ Helpful when checking network stack.
 I love windows 10 but hate how it phones home and updates/restarts your computer without warning.
 This problem drove me in search of the optimal solution to being in complete control of my DNS.
 I had already heard about pihole, but pihole has lots of limitations and a large code base.
-It does not support dnscrypt automatically and requires many extra steps to enable.
+For example, it does not support dnscrypt automatically and requires many extra steps to enable.
+The solution I came up with was, as usually happens, more powerful than I had hoped and more useful than I had expected.
 
 So why use valhalla?
 - literally zero configuration out of the box if not using vpn mode
 - docker is hip but vagrant works just fine you freakin' hipsters
 - allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
-- simple to configure and switch vpn servers
+- simple to configure and switch VPN servers
 - uses dnscrypt and dnssec without extra steps
 - very small project well suited for forking
 - hate windows update? hate cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
@@ -168,7 +169,7 @@ So why use valhalla?
 - revision control your DNS rules instead of sticking them in your pihole
 - pihole does not allow raw dnsmasq entries
 
-## monitoring
+## Monitoring
 ![NORAD bunker](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/command-bunker.png?raw=true)
 
 Who needs a fancy dashboard when you have `byobu`?
