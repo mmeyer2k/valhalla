@@ -65,7 +65,7 @@ Run `vagrant up`.
 ### Now what?
 - set your router to use the vm for its default dhcp dns.
 - set your computer(s) to use the vm for dns.
-- set your os(es) to use the http proxy on port `8888`.
+- set your os(es) to use the http proxy on port `1080`.
 
 ## Command line interface
 For the sake of simplicity, valhalla is command-line focused.

@@ -12,7 +12,8 @@ Vagrant.configure("2") do |config|
   if settings.include? "ip"
     config.vm.network "public_network", ip: settings["ip"]
     config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
-    config.vm.network "forwarded_port", guest: 8888, host: 8888, protocol: "tcp"
+    config.vm.network "forwarded_port", guest: 80, host: 80, protocol: "udp"
+    config.vm.network "forwarded_port", guest: 1080, host: 1080, protocol: "tcp"
   else
     config.vm.network "private_network", type: "dhcp"
   end
@@ -32,7 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "initializing valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml
+    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml dante-server
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack
     apt remove -y snapd
   SHELL
@@ -47,9 +48,9 @@ Vagrant.configure("2") do |config|
 
   cfg = "/etc/squid/squid.conf"
 
-  config.vm.provision "shell", name: "starting squid on 8888", args: [cfg], inline: <<-SHELL
+  config.vm.provision "shell", name: "starting squid on 1080", args: [cfg], inline: <<-SHELL
     sed -i 's|http_access deny all|http_access allow all|' $1
-    sed -i 's|http_port 3128|http_port 8888|' $1
+    sed -i 's|http_port 3128|http_port 1080|' $1
     sed -i 's|#       Example: dns_nameservers .*|dns_nameservers 127.0.0.1|' $1
     sed -i 's|dns_nameservers .*|dns_nameservers 127.0.0.1|' $1
     service squid restart
@@ -117,8 +118,9 @@ Vagrant.configure("2") do |config|
     echo '* ipv4 address:' $(cat /var/tmp/ip4)
     echo '* ipv6 address:' $(cat /var/tmp/ip6)
 	echo '*'
-	echo '* http proxy port: 8888'
-	echo '* dns resolver port: 53'
+	echo '* dns server port: 53'
+	echo '* http proxy port: 80'
+	echo '* socks5 proxy port: 1080'
 	echo '*'
   SHELL
 end
