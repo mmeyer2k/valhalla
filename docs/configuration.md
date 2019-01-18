@@ -1,28 +1,30 @@
 # configuration of `valhalla.yaml`
 
 ## `ip`
-if `ip` this option is left commented out the vm will be given an internal ip and it will only be available to the host computer.
-giving the machine an `ip` will cause it to attempt to join your network.
-be sure to give provide an `ip` in the allowable dhcp range.
+If `ip` this option is left commented out the vm will be given an internal ip and it will only be available to the host computer.
+Giving the machine an `ip` will cause it to attempt to join your network.
+Be sure to give provide an `ip` in the allowable dhcp range.
+
+**Local IP addresses require administrative privileges to be able to forward port 53 back to host**
 
 ## `mode`
 `[tight, loose, off]`
 
-defines the default build mode when running `valhalla build`.
-can always be overridden by passing a second parameter.
+Defines the default build mode when running `valhalla build`.
+Can always be overridden by passing a second parameter.
 
-read more about the build command [here](https://github.com/mmeyer2k/valhalla#build).
+Read more about the build command [here](https://github.com/mmeyer2k/valhalla#build).
 
 ## vpn
 
 ### `vpnconf`
 
-your `.ovpn` files will have `auth-user-pass` fixed on the fly.
+Your `.ovpn` files will have `auth-user-pass` fixed on the fly.
 
 ### `vpnauth`
 
-to use vpn servers which require authentication, create a file in `.openvpn.d/` with a `.auth` extension.
-you can define many authentication files for all of your vpn providers and servers. 
+To use vpn servers which require authentication, create a file in `.openvpn.d/` with a `.auth` extension.
+You can define many authentication files for all of your vpn providers and servers. 
 
 ```
 username
