@@ -381,25 +381,28 @@ function parseListsDotD(): array
  * @param string $mode
  * @return string
  */
-function buildDnsmasqRules(string $mode): string
+function buildDnsmasqRules(string &$mode): string
 {
     switch ($mode) {
         case 'tight':
         case 'ti':
         case 't':
             $mode = 'tight';
+            
             break;
 
         case 'loose':
         case 'lo':
         case 'l':
             $mode = 'loose';
+            
             break;
 
         case 'off':
         case 'of':
         case 'o':
             $mode = 'off';
+            
             break;
 
         default:
