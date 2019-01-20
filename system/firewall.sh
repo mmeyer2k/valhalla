@@ -9,9 +9,10 @@
 sed -i 's|#net/ipv4/ip_forward=1|net/ipv4/ip_forward=1|' /etc/ufw/sysctl.conf
 sed -i 's|#net/ipv6/conf/default/forwarding=1|net/ipv6/conf/default/forwarding=1|' /etc/ufw/sysctl.conf
 sed -i 's|#net/ipv6/conf/all/forwarding=1|net/ipv6/conf/all/forwarding=1|' /etc/ufw/sysctl.conf
+sysctl -p
 
 # reset rules
-yes | ufw reset
+ufw --force reset
 
 # set outbound rules
 if [ "$1" = "--vpn-lock" ]; then
@@ -34,4 +35,4 @@ ufw allow 1080
 ufw logging on
 
 # re-enable the firewall
-ufw enable
+ufw --force enable
