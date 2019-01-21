@@ -17,6 +17,8 @@ ufw --force reset
 # set outbound rules
 if [ "$1" = "--vpn-lock" ]; then
     ufw default deny outgoing
+    ufw allow out to any port 1194
+    ufw allow out on enp0s3 from any to any
     ufw allow out on tun0 from any to any
     touch /var/tmp/vpnlock
 else
