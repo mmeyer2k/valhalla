@@ -12,6 +12,7 @@ blacklist:
   
   # social media and large ecosystems i have no part of
   - facebook.com
+  - facebook.net
   - twitter.com
   - tumblr.com
   - myspace.com
