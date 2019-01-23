@@ -27,6 +27,7 @@ blacklist:
   - azureedge.net
   - edgekey.net
   - nsatc.net
+  - azurewebsites.net
 
 # microsoft things that i do sometimes need
 whitelist:
