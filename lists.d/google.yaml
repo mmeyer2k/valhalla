@@ -1,6 +1,7 @@
 # known google affiliated domains and how to handle them
 # i plan to transition to more of a whitelist only approach but i use them for too much right now
 whitelist:
+  - ocsp.pki.goog
 
 blacklist:
   - admob.net
