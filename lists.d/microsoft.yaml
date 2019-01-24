@@ -32,3 +32,4 @@ blacklist:
 # microsoft things that i do sometimes need
 whitelist:
   - answers.microsoft.com
+  - docs.microsoft.com
