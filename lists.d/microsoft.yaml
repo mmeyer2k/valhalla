@@ -33,3 +33,4 @@ blacklist:
 whitelist:
   - answers.microsoft.com
   - docs.microsoft.com
+  - developer.microsoft.com
