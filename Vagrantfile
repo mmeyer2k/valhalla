@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "initializing valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml dante-server
+    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml nginx
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack
     apt remove -y snapd
   SHELL
@@ -86,7 +86,7 @@ Vagrant.configure("2") do |config|
 
   if settings.include? "ip"
     config.vm.provision "shell", run: "always", name: "obtain dhcp ips for display", inline: <<-SHELL
-      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
+      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet' | cut -d' ' -f 2 > /var/tmp/ip4
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link' | cut -d' ' -f 2 > /var/tmp/ip6
     SHELL
   else
@@ -117,10 +117,10 @@ Vagrant.configure("2") do |config|
     echo '*'
     echo '* ipv4 address:' $(cat /var/tmp/ip4)
     echo '* ipv6 address:' $(cat /var/tmp/ip6)
-	echo '*'
-	echo '* dns server port: 53'
-	echo '* http proxy port: 80'
-	echo '* socks5 proxy port: 1080'
-	echo '*'
+    echo '*'
+    echo '* dns server port: 53'
+    echo '* http proxy port: 80'
+    echo '* socks5 proxy port: 1080'
+    echo '*'
   SHELL
 end
