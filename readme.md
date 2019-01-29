@@ -55,7 +55,7 @@ Additional hosts files can be loaded into dnsmasq at start up by putting them in
 
 ### Basic configuration
 
-General settings used to start the VM are stored in `vagrant.yaml`.
+General settings used to start the VM are stored in `config.yaml`.
 
 Read more about these settings here [here](https://github.com/mmeyer2k/valhalla/blob/master/docs/configuration.md).
 
