@@ -15,7 +15,6 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", type: "dhcp"
     config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
     config.vm.network "forwarded_port", guest: 80, host: 80, protocol: "udp"
-    config.vm.network "forwarded_port", guest: 1080, host: 1080, protocol: "tcp"
   end
 
   config.vm.provider :virtualbox do |vb|
