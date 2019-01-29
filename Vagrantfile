@@ -109,7 +109,7 @@ Vagrant.configure("2") do |config|
     figlet valhalla
     echo '*'
     echo '* build complete!'
-    echo "* please use 'vagrant ssh' to see valhalla's commandline options"
+    echo "* please use 'vagrant ssh' to see the valhalla commandline options"
     echo '*'
     echo '* https://github.com/mmeyer2k/valhalla'
     echo '*'
