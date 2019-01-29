@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "initializing valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml nginx
+    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack
     apt remove -y snapd
   SHELL
