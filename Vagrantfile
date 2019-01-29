@@ -1,7 +1,7 @@
 require 'yaml'
 
 Vagrant.configure("2") do |config|
-  settings = YAML::load(File.read('valhalla.yaml'))
+  settings = YAML::load(File.read('config.yaml'))
   hostname = "valhalla"
 
   config.vm.box = "ubuntu/bionic64"
@@ -11,15 +11,14 @@ Vagrant.configure("2") do |config|
 
   if settings.include? "ip"
     config.vm.network "public_network", ip: settings["ip"]
+  else
+    config.vm.network "private_network", type: "dhcp"
     config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
     config.vm.network "forwarded_port", guest: 80, host: 80, protocol: "udp"
     config.vm.network "forwarded_port", guest: 1080, host: 1080, protocol: "tcp"
-  else
-    config.vm.network "private_network", type: "dhcp"
   end
 
   config.vm.provider :virtualbox do |vb|
-    #vb.name = hostname
     vb.gui = false
     vb.customize [
       "modifyvm", :id,
@@ -48,9 +47,9 @@ Vagrant.configure("2") do |config|
 
   cfg = "/etc/squid/squid.conf"
 
-  config.vm.provision "shell", name: "starting squid on 1080", args: [cfg], inline: <<-SHELL
+  config.vm.provision "shell", name: "starting squid on port 80", args: [cfg], inline: <<-SHELL
     sed -i 's|http_access deny all|http_access allow all|' $1
-    sed -i 's|http_port .*|http_port 80|' $1
+    sed -i 's|http_port .*|http_port 80 transparent|' $1
     sed -i 's|#       Example: dns_nameservers .*|dns_nameservers 127.0.0.1|' $1
     sed -i 's|dns_nameservers .*|dns_nameservers 127.0.0.1|' $1
     service squid restart
