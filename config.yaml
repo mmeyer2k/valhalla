@@ -11,3 +11,4 @@ cpuexecutioncap: 90
 mode: tight
 # vpnconf: openvpn.ovpn
 # vpnauth: openvpn.auth
+# vpnlock: false
