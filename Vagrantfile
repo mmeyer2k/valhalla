@@ -119,7 +119,6 @@ Vagrant.configure("2") do |config|
     echo '*'
     echo '* dns server port: 53'
     echo '* http proxy port: 80'
-    echo '* socks5 proxy port: 1080'
     echo '*'
   SHELL
 end
