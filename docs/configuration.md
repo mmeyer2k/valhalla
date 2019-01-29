@@ -1,4 +1,4 @@
-# configuration of `valhalla.yaml`
+# Configuration of `config.yaml`
 
 ## `ip`
 If `ip` this option is left commented out the vm will be given an internal ip and it will only be available to the host computer.
