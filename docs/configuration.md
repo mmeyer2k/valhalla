@@ -1,4 +1,4 @@
-# Configuration of `config.yaml`
+# How to customize `config.yaml`
 
 ## `ip`
 If `ip` this option is left commented out the vm will be given an internal ip and it will only be available to the host computer.
@@ -30,6 +30,7 @@ You can define many authentication files for all of your vpn providers and serve
 username
 password
 ```
+### `vpnlock`
 
 ## machine resources
 
