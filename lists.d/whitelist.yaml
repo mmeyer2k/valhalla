@@ -1,14 +1,23 @@
 whitelist:
-  - plex.bz
-  - plex.tv
-  - plex.direct
-  - thepiratebay.rocks
-  - youtu.be
   - redd.it
   - byobu.co
   - circle.ci
   - transfer.sh
+  
+  # plex related
+  - plex.bz
+  - plex.tv
+  - plex.direct
+  
+  # yarr
+  - thepiratebay.rocks
+  - snahp.it
+  - mega.nz
+  - mega.co.nz
 
+  # need for asana
+  - luna1.co
+  
   # windows time sync
   - nist.gov
 

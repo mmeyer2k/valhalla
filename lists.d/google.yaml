@@ -2,6 +2,9 @@
 # i plan to transition to more of a whitelist only approach but i use them for too much right now
 whitelist:
   - ocsp.pki.goog
+  # need for gchat attachments
+  - plus.google.com
+  - youtu.be
 
 blacklist:
   - admob.net
@@ -22,4 +25,3 @@ blacklist:
   - gvt1.com
   - clients.l.google.com
   - play.google.com
-  - plus.google.com

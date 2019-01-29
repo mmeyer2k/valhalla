@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :virtualbox do |vb|
-    vb.name = hostname
+    #vb.name = hostname
     vb.gui = false
     vb.customize [
       "modifyvm", :id,
@@ -87,7 +87,7 @@ Vagrant.configure("2") do |config|
   if settings.include? "ip"
     config.vm.provision "shell", run: "always", name: "obtain dhcp ips for display", inline: <<-SHELL
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
-      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link' | cut -d' ' -f 2 > /var/tmp/ip6
+      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link'  | cut -d' ' -f 2 > /var/tmp/ip6
     SHELL
   else
     config.vm.provision "shell", run: "always", name: "obtain bridge ips for display", inline: <<-SHELL
