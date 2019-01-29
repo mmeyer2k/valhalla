@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", name: "starting squid on port 80", args: [cfg], inline: <<-SHELL
     sed -i 's|http_access deny all|http_access allow all|' $1
-    sed -i 's|http_port .*|http_port 80 transparent|' $1
+    sed -i 's|http_port .*|http_port 80|' $1
     sed -i 's|#       Example: dns_nameservers .*|dns_nameservers 127.0.0.1|' $1
     sed -i 's|dns_nameservers .*|dns_nameservers 127.0.0.1|' $1
     service squid restart
