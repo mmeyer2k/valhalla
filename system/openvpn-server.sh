@@ -4,6 +4,9 @@
 #
 # Copyright (c) 2013 Nyr. Released under the MIT License.
 
+PORT = 1337
+IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+
 newclient () {
 	OVPN = /valhalla/client.ovpn
 
@@ -93,8 +96,6 @@ crl-verify crl.pem" >> /etc/openvpn/server.conf
 echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/30-openvpn-forward.conf
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
-
 # Set NAT for the VPN subnet
 iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to $IP
 sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to $IP" $RCLOCAL
@@ -117,7 +118,7 @@ dev tun
 proto udp
 sndbuf 0
 rcvbuf 0
-remote 10.1.10.64 1337
+remote $IP $PORT
 resolv-retry infinite
 nobind
 persist-key
