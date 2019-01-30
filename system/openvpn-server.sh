@@ -4,42 +4,24 @@
 #
 # Copyright (c) 2013 Nyr. Released under the MIT License.
 
-# Detect Debian users running the script with "sh" instead of bash
-if readlink /proc/$$/exe | grep -q "dash"; then
-	echo "This script needs to be run with bash, not sh"
-	exit
-fi
-
-OS=debian
-GROUPNAME=nogroup
-RCLOCAL='/etc/rc.local'
-
 newclient () {
+	OVPN = /valhalla/client.ovpn
+
 	# Generates the custom client.ovpn
-	cp /etc/openvpn/client-common.txt ~/$1.ovpn
-	echo "<ca>" >> ~/$1.ovpn
-	cat /etc/openvpn/easy-rsa/pki/ca.crt >> ~/$1.ovpn
-	echo "</ca>" >> ~/$1.ovpn
-	echo "<cert>" >> ~/$1.ovpn
-	sed -ne '/BEGIN CERTIFICATE/,$ p' /etc/openvpn/easy-rsa/pki/issued/$1.crt >> ~/$1.ovpn
-	echo "</cert>" >> ~/$1.ovpn
-	echo "<key>" >> ~/$1.ovpn
-	cat /etc/openvpn/easy-rsa/pki/private/$1.key >> ~/$1.ovpn
-	echo "</key>" >> ~/$1.ovpn
-	echo "<tls-auth>" >> ~/$1.ovpn
-	sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/ta.key >> ~/$1.ovpn
-	echo "</tls-auth>" >> ~/$1.ovpn
+	cp /etc/openvpn/client-common.txt $OVPN
+	echo "<ca>" >> $OVPN
+	cat /etc/openvpn/easy-rsa/pki/ca.crt >>$OVPN
+	echo "</ca>" >> $OVPN
+	echo "<cert>" >> $OVPN
+	sed -ne '/BEGIN CERTIFICATE/,$ p' /etc/openvpn/easy-rsa/pki/issued/client.crt >> $OVPN
+	echo "</cert>" >> $OVPN
+	echo "<key>" >> $OVPN
+	cat /etc/openvpn/easy-rsa/pki/private/client.key >> $OVPN
+	echo "</key>" >> $OVPN
+	echo "<tls-auth>" >> $OVPN
+	sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/ta.key >> $OVPN
+	echo "</tls-auth>" >> $OVPN
 }
-
-
-IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
-read -p "IP address: " -e -i $IP IP
-  
-# If $IP is a private IP address, the server must be behind NAT
-if echo "$IP" | grep -qE '^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168)'; then
-  echo "This server is behind NAT. What is the public IPv4 address or hostname?"
-  read -p "Public IP address / hostname: " -e PUBLICIP
-fi
 
 # install openvpn server
 apt-get update
@@ -47,7 +29,7 @@ apt-get install openvpn iptables openssl ca-certificates -y
 
 # Get easy-rsa
 EASYRSAURL='https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.5/EasyRSA-nix-3.0.5.tgz'
-wget -O ~/easyrsa.tgz "$EASYRSAURL" 2>/dev/null || curl -Lo ~/easyrsa.tgz "$EASYRSAURL"
+wget -O ~/easyrsa.tgz "$EASYRSAURL" 2>/dev/null
 tar xzf ~/easyrsa.tgz -C ~/
 mv ~/EasyRSA-3.0.5/ /etc/openvpn/
 mv /etc/openvpn/EasyRSA-3.0.5/ /etc/openvpn/easy-rsa/
@@ -59,14 +41,14 @@ cd /etc/openvpn/easy-rsa/
 ./easyrsa init-pki
 ./easyrsa --batch build-ca nopass
 EASYRSA_CERT_EXPIRE=3650 ./easyrsa build-server-full server nopass
-EASYRSA_CERT_EXPIRE=3650 ./easyrsa build-client-full $CLIENT nopass
+EASYRSA_CERT_EXPIRE=3650 ./easyrsa build-client-full client nopass
 EASYRSA_CRL_DAYS=3650 ./easyrsa gen-crl
   
 # Move the stuff we need
 cp pki/ca.crt pki/private/ca.key pki/issued/server.crt pki/private/server.key pki/crl.pem /etc/openvpn
   
 # CRL is read with each client connection, when OpenVPN is dropped to nobody
-chown nobody:$GROUPNAME /etc/openvpn/crl.pem
+chown nobody:nogroup /etc/openvpn/crl.pem
   
 # Generate key for tls-auth
 openvpn --genkey --secret /etc/openvpn/ta.key
@@ -82,8 +64,8 @@ ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==
 -----END DH PARAMETERS-----' > /etc/openvpn/dh.pem
 
 # Create server.conf
-echo "port $PORT
-proto $PROTOCOL
+echo "port 1337
+proto udp
 dev tun
 sndbuf 0
 rcvbuf 0
@@ -97,12 +79,12 @@ topology subnet
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
 echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server.conf
-echo 'push "dhcp-option DNS 1.1.1.1"' >> /etc/openvpn/server.conf
-echo 'push "dhcp-option DNS 1.1.1.1"' >> /etc/openvpn/server.conf
+echo 'push "dhcp-option DNS 10.1.10.64"' >> /etc/openvpn/server.conf
+echo 'push "dhcp-option DNS 10.1.10.64"' >> /etc/openvpn/server.conf
 echo "keepalive 10 120
 cipher AES-256-CBC
 user nobody
-group $GROUPNAME
+group nogroup
 persist-key
 persist-tun
 status openvpn-status.log
@@ -111,12 +93,7 @@ crl-verify crl.pem" >> /etc/openvpn/server.conf
 echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/30-openvpn-forward.conf
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
-# Needed to use rc.local with some systemd distros
-if [[ "$OS" = 'debian' && ! -e $RCLOCAL ]]; then
-  echo '#!/bin/sh -e
-exit 0' > $RCLOCAL
-fi
-chmod +x $RCLOCAL
+IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 
 # Set NAT for the VPN subnet
 iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to $IP
@@ -135,11 +112,22 @@ fi
 
 /etc/init.d/openvpn restart
 
-# If the server is behind a NAT, use the correct IP address
-if [[ "$PUBLICIP" != "" ]]; then
-  IP=$PUBLICIP
-fi
+echo "client
+dev tun
+proto udp
+sndbuf 0
+rcvbuf 0
+remote 10.1.10.64 1337
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+auth SHA512
+cipher AES-256-CBC
+setenv opt block-outside-dns
+key-direction 1
+verb 3" > /etc/openvpn/client-common.txt
 
 # Generates the custom client.ovpn
-newclient "$CLIENT"
-echo "Your client configuration is available at:" ~/"$CLIENT.ovpn"
+newclient
