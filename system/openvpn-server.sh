@@ -4,8 +4,9 @@
 #
 # Copyright (c) 2013 Nyr. Released under the MIT License.
 
-PORT = 1337
+PORT=1337
 IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+RCLOCAL='/etc/rc.local'
 
 newclient () {
 	OVPN = /valhalla/client.ovpn
