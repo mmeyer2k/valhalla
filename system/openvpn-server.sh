@@ -4,36 +4,17 @@
 #
 # Copyright (c) 2013 Nyr. Released under the MIT License.
 
-PORT=1337
-IP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+PORT=1194
+IP='10.1.10.64'
 RCLOCAL='/etc/rc.local'
-
-newclient () {
-	OVPN = /valhalla/client.ovpn
-
-	# Generates the custom client.ovpn
-	cp /etc/openvpn/client-common.txt $OVPN
-	echo "<ca>" >> $OVPN
-	cat /etc/openvpn/easy-rsa/pki/ca.crt >>$OVPN
-	echo "</ca>" >> $OVPN
-	echo "<cert>" >> $OVPN
-	sed -ne '/BEGIN CERTIFICATE/,$ p' /etc/openvpn/easy-rsa/pki/issued/client.crt >> $OVPN
-	echo "</cert>" >> $OVPN
-	echo "<key>" >> $OVPN
-	cat /etc/openvpn/easy-rsa/pki/private/client.key >> $OVPN
-	echo "</key>" >> $OVPN
-	echo "<tls-auth>" >> $OVPN
-	sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/ta.key >> $OVPN
-	echo "</tls-auth>" >> $OVPN
-}
+OVPN=/valhalla/client.ovpn
 
 # install openvpn server
-apt-get update
 apt-get install openvpn iptables openssl ca-certificates -y
 
 # Get easy-rsa
 EASYRSAURL='https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.5/EasyRSA-nix-3.0.5.tgz'
-wget -O ~/easyrsa.tgz "$EASYRSAURL" 2>/dev/null
+curl 'https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.5/EasyRSA-nix-3.0.5.tgz' 1> ~/easyrsa.tgz 2>/dev/null
 tar xzf ~/easyrsa.tgz -C ~/
 mv ~/EasyRSA-3.0.5/ /etc/openvpn/
 mv /etc/openvpn/EasyRSA-3.0.5/ /etc/openvpn/easy-rsa/
@@ -68,20 +49,20 @@ ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==
 -----END DH PARAMETERS-----' > /etc/openvpn/dh.pem
 
 # Create server.conf
-echo "port 1337
+echo "port $PORT
 proto udp
 dev tun
 sndbuf 0
 rcvbuf 0
-ca ca.crt
-cert server.crt
-key server.key
-dh dh.pem
+ca /etc/openvpn/ca.crt
+cert /etc/openvpn/server.crt
+key /etc/openvpn/server.key
+dh /etc/openvpn/dh.pem
 auth SHA512
-tls-auth ta.key 0
+tls-auth /etc/openvpn/ta.key 0
 topology subnet
 server 10.8.0.0 255.255.255.0
-ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
+ifconfig-pool-persist /etc/openvpn/ipp.txt" > /etc/openvpn/server.conf
 echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $IP\"" >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $IP\"" >> /etc/openvpn/server.conf
@@ -91,9 +72,14 @@ user nobody
 group nogroup
 persist-key
 persist-tun
-status openvpn-status.log
+status /var/log/openvpn-status.log
 verb 3
-crl-verify crl.pem" >> /etc/openvpn/server.conf
+crl-verify /etc/openvpn/crl.pem" >> /etc/openvpn/server.conf
+
+echo '#!/bin/sh -e
+exit 0' > $RCLOCAL
+
+# IP forwarding
 echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/30-openvpn-forward.conf
 echo 1 > /proc/sys/net/ipv4/ip_forward
 
@@ -101,15 +87,12 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to $IP
 sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to $IP" $RCLOCAL
 if iptables -L -n | grep -qE '^(REJECT|DROP)'; then
-  # If iptables has at least one REJECT rule, we asume this is needed.
-  # Not the best approach but I can't think of other and this shouldn't
-  # cause problems.
-  iptables -I INPUT -p $PROTOCOL --dport $PORT -j ACCEPT
-  iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT
-  iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
-  sed -i "1 a\iptables -I INPUT -p $PROTOCOL --dport $PORT -j ACCEPT" $RCLOCAL
-  sed -i "1 a\iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT" $RCLOCAL
-  sed -i "1 a\iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT" $RCLOCAL
+	iptables -I INPUT -p udp --dport $PORT -j ACCEPT
+	iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT
+	iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+	sed -i "1 a\iptables -I INPUT -p udp --dport $PORT -j ACCEPT" $RCLOCAL
+	sed -i "1 a\iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT" $RCLOCAL
+	sed -i "1 a\iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT" $RCLOCAL
 fi
 
 /etc/init.d/openvpn restart
@@ -132,4 +115,16 @@ key-direction 1
 verb 3" > /etc/openvpn/client-common.txt
 
 # Generates the custom client.ovpn
-newclient
+cp /etc/openvpn/client-common.txt $OVPN
+echo "<ca>" >> $OVPN
+cat /etc/openvpn/easy-rsa/pki/ca.crt >>$OVPN
+echo "</ca>" >> $OVPN
+echo "<cert>" >> $OVPN
+sed -ne '/BEGIN CERTIFICATE/,$ p' /etc/openvpn/easy-rsa/pki/issued/client.crt >> $OVPN
+echo "</cert>" >> $OVPN
+echo "<key>" >> $OVPN
+cat /etc/openvpn/easy-rsa/pki/private/client.key >> $OVPN
+echo "</key>" >> $OVPN
+echo "<tls-auth>" >> $OVPN
+sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/ta.key >> $OVPN
+echo "</tls-auth>" >> $OVPN

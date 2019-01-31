@@ -31,6 +31,7 @@ ufw default deny incoming
 ufw allow 22
 ufw allow 53
 ufw allow 80
+ufw allow 1194
 
 # enable logs
 ufw logging on
