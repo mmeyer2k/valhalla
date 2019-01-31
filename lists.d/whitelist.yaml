@@ -3,6 +3,7 @@ whitelist:
   - byobu.co
   - circle.ci
   - transfer.sh
+  - t.co
   
   # plex related
   - plex.bz
