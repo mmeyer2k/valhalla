@@ -4,6 +4,7 @@ whitelist:
   - circle.ci
   - transfer.sh
   - t.co
+  - noaa.gov
   
   # plex related
   - plex.bz
