@@ -5,6 +5,7 @@ whitelist:
   - transfer.sh
   - t.co
   - noaa.gov
+  - tokentax.co
   
   # plex related
   - plex.bz
