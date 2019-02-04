@@ -7,6 +7,7 @@ whitelist:
   - noaa.gov
   - tokentax.co
   - tokentax.us
+  - bear.tax
   
   # plex related
   - plex.bz
