@@ -6,6 +6,7 @@ whitelist:
   - t.co
   - noaa.gov
   - tokentax.co
+  - tokentax.us
   
   # plex related
   - plex.bz
