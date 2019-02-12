@@ -6,6 +6,7 @@ whitelist:
   - t.co
   - noaa.gov
   - twit.tv
+  - twitch.tv
   
   # plex related
   - plex.bz
