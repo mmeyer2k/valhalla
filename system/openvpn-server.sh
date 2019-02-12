@@ -9,7 +9,7 @@ OVPN=/valhalla/client.ovpn
 apt-get install openvpn iptables openssl ca-certificates -y
 
 # Get easy-rsa
-curl 'https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.6/EasyRSA-unix-v3.0.6.tgz' 1> ~/easyrsa.tgz 2>/dev/null
+curl -L 'https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.6/EasyRSA-unix-v3.0.6.tgz' 1> ~/easyrsa.tgz 2>/dev/null
 tar xzf ~/easyrsa.tgz -C ~/
 mv ~/EasyRSA-3.0.5/ /etc/openvpn/
 mv /etc/openvpn/EasyRSA-3.0.5/ /etc/openvpn/easy-rsa/
