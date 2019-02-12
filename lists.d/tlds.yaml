@@ -1,5 +1,5 @@
 # whitelisting tlds is a very effective method of keeping nefarious things off of your network
-# this could also only be a blacklist if that is easier for you.
+# this could also only be a blacklist if that is easier for you
 # but i found that i am able to survive with only a small number of tlds
 
 # in tight mode, only these tlds will be allowed
