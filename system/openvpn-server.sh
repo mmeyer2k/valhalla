@@ -11,8 +11,8 @@ apt-get install openvpn iptables openssl ca-certificates -y
 # Get easy-rsa
 curl -L 'https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.6/EasyRSA-unix-v3.0.6.tgz' 1> ~/easyrsa.tgz 2>/dev/null
 tar xzf ~/easyrsa.tgz -C ~/
-mv ~/EasyRSA-3.0.5/ /etc/openvpn/
-mv /etc/openvpn/EasyRSA-3.0.5/ /etc/openvpn/easy-rsa/
+mv ~/EasyRSA-3.0.6/ /etc/openvpn/
+mv /etc/openvpn/EasyRSA-3.0.6/ /etc/openvpn/easy-rsa/
 chown -R root:root /etc/openvpn/easy-rsa/
 rm -f ~/easyrsa.tgz
 cd /etc/openvpn/easy-rsa/
