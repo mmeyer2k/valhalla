@@ -1,8 +1,4 @@
 #!/bin/bash
-#
-# https://github.com/Nyr/openvpn-install
-#
-# Copyright (c) 2013 Nyr. Released under the MIT License.
 
 PORT=1194
 IP='10.1.10.64'
