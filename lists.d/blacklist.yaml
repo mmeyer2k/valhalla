@@ -1,5 +1,4 @@
 blacklist:
-
   # software i use but that does not need to be making dns requests to function properly
   - analytics.atlassian.com
   - getgreenshot.org
@@ -9,6 +8,7 @@ blacklist:
   #- atl-paas.net
   - intellij.net
   - api.cryptomator.org
+  - att.com
   
   # social media and large ecosystems i have no part of
   - facebook.com
