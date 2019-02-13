@@ -1,4 +1,4 @@
-# Valhalla - a highly configurable dns caching virtual server
+# Valhalla - a highly configurable DNS tunneling virtual server
 
 ![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/topology.png?raw=true)
 
