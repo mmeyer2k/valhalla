@@ -14,24 +14,10 @@ sysctl -p
 # reset rules
 ufw --force reset
 
-# set outbound rules
-if [ "$1" = "--vpn-lock" ]; then
-    ufw default deny outgoing
-    ufw allow out to any port 1194
-    ufw allow out on enp0s3 from any to any
-    ufw allow out on tun0 from any to any
-    touch /var/tmp/vpnlock
-else
-    ufw default allow outgoing
-    rm -f /var/tmp/vpnlock
-fi
-
 # set inbound rules
 ufw default deny incoming
 ufw allow 22
-ufw allow 53
 ufw allow 80
-ufw allow 1194
 
 # enable logs
 ufw logging on
