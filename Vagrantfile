@@ -14,7 +14,6 @@ Vagrant.configure("2") do |config|
   else
     config.vm.network "private_network", type: "dhcp"
     config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
-    config.vm.network "forwarded_port", guest: 80, host: 80, protocol: "udp"
   end
 
   config.vm.provider :virtualbox do |vb|
@@ -31,7 +30,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "initializing valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy openvpn squid libyaml-dev php7.2-yaml
+    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy libyaml-dev php7.2-yaml
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack
     apt remove -y snapd
   SHELL
@@ -43,18 +42,6 @@ Vagrant.configure("2") do |config|
     sed -i 's|ipv6_servers = .*|ipv6_servers = true|' $1
     service dnscrypt-proxy restart
   SHELL
-
-  config.vm.provision "shell", name: "starting squid on port 80", inline: <<-SHELL
-    cp -f /valhalla/system/squid.conf /etc/squid/squid.conf
-    service squid restart
-  SHELL
-
-  if settings.include? "vpnconf"
-    config.vm.provision "shell", name: "rigging openvpn for silent running", args: [settings["vpnconf"], settings["vpnauth"]], inline: <<-SHELL
-      php /valhalla/system/valhalla.php vpn $1 $2
-      service openvpn-client restart
-    SHELL
-  end
 
   # set up the firewall options
   config.vm.provision "shell", name: "configure ufw", path: "./system/firewall.sh"
@@ -112,7 +99,6 @@ Vagrant.configure("2") do |config|
     echo '* ipv6 address:' $(cat /var/tmp/ip6)
     echo '*'
     echo '* dns server port: 53'
-    echo '* http proxy port: 80'
     echo '*'
   SHELL
 end
