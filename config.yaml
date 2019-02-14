@@ -1,8 +1,6 @@
 # valhalla - primary configuration
 # check documentation for how to use these options
-#
 # https://github.com/mmeyer2k/valhalla/blob/master/docs/configuration.md
-#
 
 # ip: 10.1.10.64
 memory: 512

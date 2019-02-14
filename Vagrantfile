@@ -38,8 +38,7 @@ Vagrant.configure("2") do |config|
   cfg = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
 
   config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg], inline: <<-SHELL
-    sed -i 's|require_dnssec = .*|require_dnssec = true|' $1
-    sed -i 's|ipv6_servers = .*|ipv6_servers = true|' $1
+    ln -fsv /valhalla/system/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
     service dnscrypt-proxy restart
   SHELL
 
