@@ -15,30 +15,13 @@ Can always be overridden by passing a second parameter.
 
 Read more about the build command [here](https://github.com/mmeyer2k/valhalla#build).
 
-## vpn
-
-### `vpnconf`
-
-Your `.ovpn` files will have `auth-user-pass` fixed on the fly.
-
-### `vpnauth`
-
-To use vpn servers which require authentication, create a file in `.openvpn.d/` with a `.auth` extension.
-You can define many authentication files for all of your vpn providers and servers. 
-
-```
-username
-password
-```
-### `vpnlock`
-
 ## machine resources
 
-## `mem`
-amount of memory given to vagrant
+### `mem`
+Amount of memory given to vagrant.
 
-## `cpu`
-number of cpu cores to give to vagrant
+### `cpu`
+Number of cpu cores to give to vagrant.
 
-## `cpuexecutioncap`
-limit the amount of cpu power available
+### `cpuexecutioncap`
+Limit the amount of CPU power available.

@@ -9,6 +9,3 @@ memory: 512
 cpus: 2
 cpuexecutioncap: 90
 mode: tight
-# vpnconf: openvpn.ovpn
-# vpnauth: openvpn.auth
-# vpnlock: false

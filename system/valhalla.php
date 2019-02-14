@@ -26,28 +26,6 @@ switch ($command) {
 
                 break;
 
-            case 'squid':
-            case 'sq':
-            case 's':
-                $file = '/var/log/squid/access.log';
-
-                break;
-
-            case 'clear':
-            case 'cl':
-            case 'c':
-                $yn = trim(readline("are you sure you want to clear the logs? [N/y] "));
-
-                if ($yn !== 'y' && $yn !== 'yes') {
-                    break 2;
-                }
-
-                `echo > /var/log/dnsmasq/dnsmasq.log`;
-
-                colorLine('logs have been cleared', 2);
-
-                break 2;
-
             case 'rotate':
             case 'ro':
             case 'r':
@@ -110,7 +88,7 @@ switch ($command) {
             case 'a':
                 echo("showing dns requests forwarded to upstream in descending frequency...\n\n");
 
-                passthru("cat $logfile | grep ' forwarded ' | grep '127.0.2.1' |  cut -d' ' -f 6 | sort | uniq -c | sort -r");
+                passthru("cat $logfile | grep ' forwarded ' | grep '127.0.2.1' |  cut -d' ' -f 6 | sort | uniq -c | sort -nr");
 
                 break;
 
@@ -119,7 +97,7 @@ switch ($command) {
             case 'q':
                 echo "showing dns queries inbound in descending frequency...\n\n";
 
-                passthru("cat $logfile | grep ' query' |  cut -d' ' -f 6 | sort | uniq -c | sort -r");
+                passthru("cat $logfile | grep ' query' |  cut -d' ' -f 6 | sort | uniq -c | sort -nr");
 
                 break;
 
@@ -128,7 +106,7 @@ switch ($command) {
             case 'd':
                 echo "showing dns requests given 0.0.0.0 in descending frequency...\n\n";
 
-                passthru("cat $logfile | grep ' is 0.0.0.0' | cut -d' ' -f 6 | sort | uniq -c | sort -r");
+                passthru("cat $logfile | grep ' is 0.0.0.0' | cut -d' ' -f 6 | sort | uniq -c | sort -nr");
 
                 break;
 
@@ -137,7 +115,7 @@ switch ($command) {
             case 'c':
                 echo "showing dns requests per client in descending frequency...\n\n";
 
-                passthru("cat $logfile | grep query | grep from | cut -d' ' -f 8 | sort | uniq -c | sort -r");
+                passthru("cat $logfile | grep query | grep from | cut -d' ' -f 8 | sort | uniq -c | sort -nr");
 
                 break;
 
@@ -175,7 +153,7 @@ function printHelp()
 * valhalla 
 *     build   [tight, loose, off]
 *     digest  [allowed, denied, queried, clients] [past]
-*     log     [dnsmasq, squid, clear, rotate] [past]
+*     log     [dnsmasq, rotate] [past]
 *     stress
 *     3p
 *     help
@@ -209,37 +187,6 @@ function removeLines(array $input): array
 
         return $row;
     }, $input));
-}
-
-function numericOpenvpnConfigList(): array
-{
-    $ret = [];
-
-    foreach (scandir(__DIR__ . '/../openvpn.d') as $f) {
-        if (strpos($f, '.ovpn') !== false) {
-            $ret[] = basename($f);
-        }
-    }
-
-    return $ret;
-}
-
-/**
- * get flat array of openvpn authorization files in openvpn.d/
- *
- * @return array
- */
-function numericOpenvpnAuthList(): array
-{
-    $ret = [];
-
-    foreach (scandir(__DIR__ . '/../openvpn.d') as $f) {
-        if (strpos($f, '.auth') !== false) {
-            $ret[] = basename($f);
-        }
-    }
-
-    return $ret;
 }
 
 function abort(string $message)
