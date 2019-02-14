@@ -1,19 +1,15 @@
 # Valhalla - a highly configurable DNS tunneling virtual server
 
-![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/topology.png?raw=true)
-
 Are you sitting down?
 Valhalla combines a range of technologies to provide secure and rapid DNS delivery for your entire network.
 At its core, the primary functions of valhalla are:
 - to provide a LAN accessible DNS server with highly customizable white and black lists
 - to use dnscrypt to securely forward DNS queries over HTTPS
-- to (optionally) forward all internet-bound traffic from the VM through a VPN server for extra privacy
-- to present an open HTTP proxy that any computer can use, which allows them to take advantage of the DNS rules and VPN tunnel simultaneously
 - to use continuously updated copies of the very good blocklists at [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) to block spam, ads, malware, telemetry and other garbage
 - to be able to run as a minimalist virtual machine for portability
 - to provide a robust commandline interface to control the system
 
-The basic technology stack is: ubuntu + dnsmasq + dnscrypt + dnssec + openvpn + squid + vagrant
+The basic technology stack is: ubuntu + dnsmasq + dnscrypt + dnssec + vagrant
 
 ## How to get started with valhalla
 
@@ -78,11 +74,9 @@ For example `valhalla log squid`, `v l s` and `va lo sq` are identical.
 ![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/cli.png?raw=true)
 
 ### `log`
-`usage: valhalla log [dnsmasq, squid, clear, rotate] [past]`
+`usage: valhalla log [dnsmasq, clear, rotate] [past]`
 
 Use the `log` command to tail log files in real time.
-Second parameter is optional and determines which program's log to watch.
-Default is `dnsmasq`.
 
 Optional `past` parameter will output logs that have already been rotated.
 
@@ -100,18 +94,6 @@ These modes do not affect items in the `hosts.d` directory or third-party rule s
 - `tight` - obey whist and black lists while discarding anything that does not match any list
 - `loose` - only obey blacklist but allow everything else
 - `off` - disable all dns filtering
-
-### `vpn`
-`usage: valhalla vpn [config] [auth]`
-
-Use the`vpn` command to switch your vpn connection.
-Leave both options blank to view a numerical list of configs and auths.
-
-The `vpn` command takes two parameters `conf` and `auth`.
-If server does not require authentication then auth argument can be omitted.
-Either the numerical list number or the file name can be used on the command line.
-
-![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/cli-vpn.png?raw=true)
 
 ### `digest`
 `usage: valhalla digest [allowed, denied, queried, clients] [past]`
@@ -161,7 +143,6 @@ So why use valhalla?
 - literally zero configuration out of the box if not using vpn mode
 - docker is hip but vagrant works just fine you freakin' hipsters
 - allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
-- simple to configure and switch VPN servers
 - uses dnscrypt and dnssec without extra steps
 - very small project well suited for forking
 - hate windows update? hate cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
