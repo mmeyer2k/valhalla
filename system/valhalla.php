@@ -98,102 +98,6 @@ switch ($command) {
 
         break;
 
-    case 'vpn':
-    case 'vp':
-    case 'v':
-        $conf = $argv[2] ?? null;
-        $auth = $argv[3] ?? null;
-
-        // Handle the vpn locking feature
-        if ($conf === 'lock') {
-            switch ($auth) {
-                case 'enabled':
-                case 'en':
-                case 'e':
-                    passthru("sh $dir/firewall.sh --vpn-lock");
-
-                    break;
-
-                case 'disabled':
-                case 'di':
-                case 'd':
-                    passthru("sh $dir/firewall.sh");
-
-                    break;
-
-                default:
-                    $vpnstatus = vpnLockStatus();
-
-                    echo <<<EOT
-vpnlock status: $vpnstatus
-
-EOT;
-
-
-                    break;
-            }
-
-            break;
-        }
-
-        # list vpn configs
-        if ($conf === null) {
-            colorLine('listing available vpn configuration(s) in valhalla/openvpn.d...', 2);
-
-            foreach (numericOpenvpnConfigList() as $i => $v) {
-                $pad = str_pad("$i)", 6, ' ', STR_PAD_RIGHT);
-                colorLine("$i)  $v", 3);
-            }
-
-            echo PHP_EOL;
-
-            colorLine('listing available vpn authentication(s) in valhalla/openvpn.d...', 2);
-
-            foreach (numericOpenvpnAuthList() as $i => $v) {
-                $pad = str_pad("$i)", 6, ' ', STR_PAD_RIGHT);
-                colorLine("$i)  $v", 3);
-            }
-
-            break;
-        }
-
-        if (is_numeric($conf)) {
-            $conf = numericOpenvpnConfigList()[$conf];
-        }
-
-        if (!file_exists("/valhalla/openvpn.d/$conf")) {
-            abort("openvpn config file [$conf] does not exist!");
-        }
-
-        # add/overwrite systemd start file
-        `cp -f $dir/../system/openvpn-client.service /lib/systemd/system/openvpn-client.service`;
-
-        # link openvpn to new config
-        `cp -f $dir/../openvpn.d/$conf /etc/openvpn/client/openvpn.ovpn`;
-
-        # see if authentication is configured properly
-        $c = file_get_contents("/etc/openvpn/client/openvpn.ovpn");
-        if (strpos($c, 'auth-user-pass') !== false) {
-            if ($auth !== null) {
-                $f = is_numeric($auth) ? numericOpenvpnAuthList()[$auth] : $auth;
-                `sed -i 's|auth-user-pass.*|auth-user-pass $f |' /etc/openvpn/client/openvpn.ovpn`;
-            } else {
-                if (strpos($c, 'auth-user-pass ') === false) {
-                    abort("must specify a authentication file, use valhalla --vpn to see list", 7, 1);
-                }
-            }
-        }
-
-        # reload init script
-        `systemctl daemon-reload`;
-
-        # restart service
-        `service openvpn-client restart`;
-
-        colorLine("switched to vpn: $conf", 2);
-
-        break;
-
     case 'digest':
     case 'di':
     case 'd':
@@ -263,12 +167,8 @@ function printHelp()
 {
     passthru("tput setaf 2 ; figlet valhalla ; tput sgr0");
 
-    $vpnstatus = vpnLockStatus();
-
     echo <<<EOT
 * a highly configurable dns caching virtual server
-*
-* vpn lock status: $vpnstatus
 *
 * https://github.com/mmeyer2k/valhalla#command-line-interface
 *
@@ -276,23 +176,11 @@ function printHelp()
 *     build   [tight, loose, off]
 *     digest  [allowed, denied, queried, clients] [past]
 *     log     [dnsmasq, squid, clear, rotate] [past]
-*     vpn     [conf] [auth]
 *     stress
 *     3p
 *     help
 
 EOT;
-}
-
-function vpnLockStatus()
-{
-
-    $vpnlock = file_exists('/var/tmp/vpnlock') ? 'on' : 'off';
-    $vpnlockcolor = $vpnlock === 'on' ? "\033[0;32m" : "\033[0;31m";
-    $bold = "\033[1m";
-    $clear = "\033[0m";
-
-    return "{$vpnlockcolor}{$bold}{$vpnlock}{$clear}";
 }
 
 function colorLine(string $msg, ?int $font = null, ?int $bg = null)
