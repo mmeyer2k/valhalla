@@ -1,15 +1,18 @@
 # Valhalla - a highly configurable DNS tunneling virtual server
 
+![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/topology.png?raw=true)
+
 Are you sitting down?
 Valhalla combines a range of technologies to provide secure and rapid DNS delivery for your entire network.
 At its core, the primary functions of valhalla are:
 - to provide a LAN accessible DNS server with highly customizable white and black lists
-- to use dnscrypt to securely forward DNS queries over HTTPS
+- to use DNSCrypt to securely forward DNS queries over HTTPS
 - to use continuously updated copies of the very good blocklists at [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) to block spam, ads, malware, telemetry and other garbage
 - to be able to run as a minimalist virtual machine for portability
 - to provide a robust commandline interface to control the system
+- to optionally send all outbound traffic through a socks5 proxy for end to end privacy
 
-The basic technology stack is: ubuntu + dnsmasq + dnscrypt + dnssec + vagrant
+The basic technology stack is: Ubuntu 18 + Dnsmasq + DNSCrypt + DNSSEC + Vagrant
 
 ## How to get started with valhalla
 
@@ -20,7 +23,7 @@ If you want to use this for yourself, start by making your own fork/clone.
 In the future I may work to make this more universal, but for now this should be considered a demonstration of what is possible.
 Pull requests are welcome nonetheless!
 
-**Valhalla is meant to be run on your local network and not exposed to the internet, as it would act as an open DNS resolver and open HTTP proxy!**
+**Valhalla is meant to be run on your local network and not exposed to the internet, as it would act as an open DNS resolver!**
 
 ### Creating rules
 
@@ -59,15 +62,14 @@ Read more about these settings here [here](https://github.com/mmeyer2k/valhalla/
 Run `vagrant up`.
 
 ### Now what?
-- set your router to use the vm for its default dhcp dns.
-- set your computer(s) to use the vm for dns.
-- set your os(es) to use the http proxy on port `1080`.
+- set your router to use the vm for its default DHCP dns.
+- set your computer(s) to use the vm for DNS.
 
 ## Command line interface
 For the sake of simplicity, valhalla is command-line focused.
 Once booted, use `vagrant ssh` to log in to the vm then `valhalla` to view options.
 
-Please note, interchangeable aliases for the `valhalla` executable are available: `v` and `va`.
+Please note: interchangeable aliases for the `valhalla` executable are available: `v` and `va`.
 Additionally, all parameters can be accessed by their first one or two characters.
 For example `valhalla log squid`, `v l s` and `va lo sq` are identical.
 
@@ -141,9 +143,9 @@ So why use valhalla?
 - Zero configuration to get started
 - Docker is cool but Vagrant works just fine you freakin' hipsters
 - Allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
-- Uses dnscrypt and dnssec without extra steps.
+- Uses dnscrypt and DNSSEC without extra steps.
 - Very small project well suited for forking.
-- Hate Windows Update? Hate Cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
+- Hate Windows Update? Hate Cortana? Nuke all Microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
 - Revision control your DNS rules instead of sticking them in your pihole
 - pihole does not allow raw dnsmasq entries
 
