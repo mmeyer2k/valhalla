@@ -6,6 +6,7 @@ whitelist:
   - noaa.gov
   - twit.tv
   - twitch.tv
+  - dnscrypt.info
   
   # plex related
   - plex.bz

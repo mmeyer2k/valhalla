@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "initializing valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy libyaml-dev php7.2-yaml
+    apt install -y dnsmasq figlet libsodium-dev git php7.2-cli dnscrypt-proxy libyaml-dev php7.2-yaml tor
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack
     apt remove -y snapd
   SHELL
@@ -38,7 +38,18 @@ Vagrant.configure("2") do |config|
   cfg = "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
 
   config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg], inline: <<-SHELL
-    ln -fsv /valhalla/system/dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+    sed -i 's|require_dnssec = .*|require_dnssec = true|' $1
+    sed -i 's|ipv6_servers = .*|ipv6_servers = true|' $1
+  SHELL
+
+  if settings.include? "socks5"
+    config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg, settings["socks5"]], inline: <<-SHELL
+      sed -i 's|# proxy = .*|proxy =  $2|' $1
+      sed -i 's|proxy = .*|proxy =  $2|' $1
+    SHELL
+  end
+
+  config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg], inline: <<-SHELL
     service dnscrypt-proxy restart
   SHELL
 

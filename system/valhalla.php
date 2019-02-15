@@ -35,10 +35,6 @@ switch ($command) {
 
                 passthru('logrotate /etc/logrotate.d/dnsmasq');
 
-                colorLine('rotating squid log', 2);
-
-                passthru('logrotate /etc/logrotate.d/squid');
-
                 colorLine('done!', 2);
 
                 break 2;

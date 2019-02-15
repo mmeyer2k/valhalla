@@ -2,8 +2,9 @@
 # check documentation for how to use these options
 # https://github.com/mmeyer2k/valhalla/blob/master/docs/configuration.md
 
-# ip: 10.1.10.64
+#ip: 10.1.10.16
 memory: 512
 cpus: 2
 cpuexecutioncap: 90
 mode: tight
+#socks5: socks5://127.0.0.1:9050
