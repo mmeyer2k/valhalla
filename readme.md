@@ -80,8 +80,6 @@ Use the `log` command to tail log files in real time.
 
 Optional `past` parameter will output logs that have already been rotated.
 
-`clear` will clear out the logs of `dnsmasq` and `squid` along with all rotated histories.
-
 `rotate` will force the logs to rotate.
 
 ### `build`
@@ -133,20 +131,20 @@ Generate random DNS queries that are likely to be forwarded.
 Helpful when checking network stack.
 
 ## Why did I do this?
-I love windows 10 but hate how it phones home and updates/restarts your computer without warning.
+I love Windows 10 but hate how it phones home and updates/restarts your computer without warning.
 This problem drove me in search of the optimal solution to being in complete control of my DNS.
 I had already heard about pihole, but pihole has lots of limitations and a large code base.
 For example, it does not support dnscrypt automatically and requires many extra steps to enable.
 The solution I came up with was, as usually happens, more powerful than I had hoped and more useful than I had expected.
 
 So why use valhalla?
-- literally zero configuration out of the box if not using vpn mode
-- docker is hip but vagrant works just fine you freakin' hipsters
-- allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
-- uses dnscrypt and dnssec without extra steps
-- very small project well suited for forking
-- hate windows update? hate cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
-- revision control your DNS rules instead of sticking them in your pihole
+- Zero configuration to get started
+- Docker is cool but Vagrant works just fine you freakin' hipsters
+- Allows you to easily exclude entire swaths of the internet by [**only** allowing tlds you need](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/tlds.yaml)
+- Uses dnscrypt and dnssec without extra steps.
+- Very small project well suited for forking.
+- Hate Windows Update? Hate Cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
+- Revision control your DNS rules instead of sticking them in your pihole
 - pihole does not allow raw dnsmasq entries
 
 ## Monitoring

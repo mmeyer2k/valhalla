@@ -40,17 +40,22 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg], inline: <<-SHELL
     sed -i 's|require_dnssec = .*|require_dnssec = true|' $1
     sed -i 's|ipv6_servers = .*|ipv6_servers = true|' $1
-    sed -i 's|force_tcp = .*|force_tcp = true|' $1
   SHELL
 
   if settings.include? "socks5"
-    config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg, settings["socks5"]], inline: <<-SHELL
-      sed -i 's|# proxy = .*|proxy =  $2|' $1
-      sed -i 's|proxy = .*|proxy =  $2|' $1
+    config.vm.provision "shell", name: "enabling dnscrypt socks5 proxy", args: [cfg, settings["socks5"]], inline: <<-SHELL
+      sed -i 's|# proxy = .*|proxy = $2|' $1
+      sed -i 's|proxy = .*|proxy = $2|' $1
+      sed -i 's|force_tcp = .*|force_tcp = true|' $1
+    SHELL
+  else
+    config.vm.provision "shell", name: "disabling dnscrypt socks5 proxy", args: [cfg], inline: <<-SHELL
+      sed -i 's|proxy = .*|# proxy = |' $1
+      sed -i 's|force_tcp = .*|force_tcp = false|' $1
     SHELL
   end
 
-  config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg], inline: <<-SHELL
+  config.vm.provision "shell", name: "restarting dnscrypt-proxy service", inline: <<-SHELL
     service dnscrypt-proxy restart
   SHELL
 
