@@ -15,6 +15,11 @@ Can always be overridden by passing a second parameter.
 
 Read more about the build command [here](https://github.com/mmeyer2k/valhalla#build).
 
+## `socks5`
+Send all outgoing traffic through a socks5 proxy for extra privacy.
+Leave line commented for direct connection to DNS servers.
+Tor is installed by default and listening at `socks5://127.0.0.1:9050`.
+
 ## machine resources
 
 ### `mem`

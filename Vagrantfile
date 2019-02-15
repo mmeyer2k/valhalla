@@ -43,9 +43,10 @@ Vagrant.configure("2") do |config|
   SHELL
 
   if settings.include? "socks5"
-    config.vm.provision "shell", name: "enabling dnscrypt socks5 proxy", args: [cfg, settings["socks5"]], inline: <<-SHELL
-      sed -i "s|# proxy = .*|proxy = \"$2\"" $1
-      sed -i "s|proxy = .*|proxy = \"$2\"" $1
+    socks5 = '"' << settings["socks5"] << '"'
+    config.vm.provision "shell", name: "enabling dnscrypt socks5 proxy", args: [cfg, socks5], inline: <<-SHELL
+      sed -i "s|# proxy = .*|proxy = $2|" $1
+      sed -i "s|proxy = .*|proxy = $2|" $1
       sed -i 's|force_tcp = .*|force_tcp = true|' $1
     SHELL
   else
