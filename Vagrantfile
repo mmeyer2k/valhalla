@@ -40,6 +40,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "configuring dnscrypt", args: [cfg], inline: <<-SHELL
     sed -i 's|require_dnssec = .*|require_dnssec = true|' $1
     sed -i 's|ipv6_servers = .*|ipv6_servers = true|' $1
+    sed -i 's|force_tcp = .*|force_tcp = true|' $1
   SHELL
 
   if settings.include? "socks5"

@@ -146,7 +146,6 @@ So why use valhalla?
 - uses dnscrypt and dnssec without extra steps
 - very small project well suited for forking
 - hate windows update? hate cortana? nuke all microsoft related domains [like i do](https://github.com/mmeyer2k/valhalla/blob/master/lists.d/microsoft.yaml)
-- don't need to trust client software from shady VPN companies, just use their openvpn config files
 - revision control your DNS rules instead of sticking them in your pihole
 - pihole does not allow raw dnsmasq entries
 
