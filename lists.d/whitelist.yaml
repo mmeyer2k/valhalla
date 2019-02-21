@@ -4,6 +4,7 @@ whitelist:
   - transfer.sh
   - t.co
   - noaa.gov
+  - faa.gov
   - twit.tv
   - twitch.tv
   - dnscrypt.info
