@@ -8,6 +8,7 @@ whitelist:
   - twit.tv
   - twitch.tv
   - dnscrypt.info
+  - overpass-api.de
   
   # plex related
   - plex.bz
