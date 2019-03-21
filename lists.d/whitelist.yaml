@@ -9,6 +9,7 @@ whitelist:
   - twitch.tv
   - dnscrypt.info
   - overpass-api.de
+  - drawbridge.xyz
   
   # plex related
   - plex.bz
