@@ -11,6 +11,9 @@ whitelist:
   - overpass-api.de
   - drawbridge.xyz
   
+  # protonmail
+  - protonmail.ch
+  
   # plex related
   - plex.bz
   - plex.tv
