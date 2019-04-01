@@ -10,6 +10,7 @@ whitelist:
   - dnscrypt.info
   - overpass-api.de
   - drawbridge.xyz
+  - byobu.co
   
   # protonmail
   - protonmail.ch
