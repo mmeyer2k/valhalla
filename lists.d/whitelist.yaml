@@ -11,6 +11,7 @@ whitelist:
   - overpass-api.de
   - drawbridge.xyz
   - byobu.co
+  - crt.sh
   
   # protonmail
   - protonmail.ch
