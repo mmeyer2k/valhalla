@@ -62,8 +62,8 @@ Read more about these settings here [here](https://github.com/mmeyer2k/valhalla/
 Run `vagrant up`.
 
 ### Now what?
-- set your router to use the vm for its default DHCP dns.
-- set your computer(s) to use the vm for DNS.
+- set your router to use the VM for its default DHCP DNS.
+- set all of your computers and devices to use the VM for DNS.
 
 ## Command line interface
 For the sake of simplicity, valhalla is command-line focused.
@@ -75,15 +75,6 @@ For example `valhalla log squid`, `v l s` and `va lo sq` are identical.
 
 ![command line interface](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/cli.png?raw=true)
 
-### `log`
-`usage: valhalla log [dnsmasq, clear, rotate] [past]`
-
-Use the `log` command to tail log files in real time.
-
-Optional `past` parameter will output logs that have already been rotated.
-
-`rotate` will force the logs to rotate.
-
 ### `build`
 `usage: valhalla build [tight, loose, off]`
 
@@ -94,6 +85,15 @@ These modes do not affect items in the `hosts.d` directory or third-party rule s
 - `tight` - obey whist and black lists while discarding anything that does not match any list
 - `loose` - only obey blacklist but allow everything else
 - `off` - disable all dns filtering
+
+### `log`
+`usage: valhalla log [dnsmasq, clear, rotate] [past]`
+
+Use the `log` command to tail log files in real time.
+
+Optional `past` parameter will output logs that have already been rotated.
+
+`rotate` will force the logs to rotate.
 
 ### `digest`
 `usage: valhalla digest [allowed, denied, queried, clients] [past]`
