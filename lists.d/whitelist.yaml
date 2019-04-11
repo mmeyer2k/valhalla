@@ -10,36 +10,30 @@ whitelist:
   - dnscrypt.info
   - overpass-api.de
   - drawbridge.xyz
+  - thepiratebay.rocks
   - byobu.co
   - crt.sh
   
   # protonmail
   - protonmail.ch
   
-  # plex related
+  # plex
   - plex.bz
   - plex.tv
   - plex.direct
-  
-  # yarr
-  - thepiratebay.rocks
-  - snahp.it
-  - mega.nz
-  - mega.co.nz
 
-  # need for asana
+  # need this for asana to work
   - luna1.co
   
   # windows time sync
   - nist.gov
 
-  # uBlock origin needs these i think
-  # but do i even need uBlock anymore?
+  # uBlock origin needs these
   - fanboy.co.nz
   - easylist.to
 
   # these sites are handy for viewing a one-off blacklisted domain without changing your rule set
-  # also good for data preservation
+  # also good for data preservation and archiving
   - archive.fo
   - archive.is
   - unv.is
