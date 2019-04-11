@@ -119,13 +119,6 @@ valhalla digest queried | less
 
 ![digest denied](https://github.com/mmeyer2k/valhalla/blob/master/docs/img/cli-digest.png?raw=true)
 
-### `3p`
-`usage: valhalla 3p`
-
-Re-download third-party blocklists and restart dnsmasq.
-This command is scheduled to run once per day.
-Please see [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists).
-
 ### `stress`
 `usage: valhalla stress`
 
