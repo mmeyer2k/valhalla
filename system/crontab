@@ -1,1 +1,3 @@
-0 0 * * * php /valhalla/system/valhalla.php 3p ; service dnsmasq restart
+0 0 * * * curl -fsSL https://raw.githubusercontent.com/notracking/hosts-blocklists/master/domains.txt > /etc/dnsmasq.d/notracking
+0 0 * * * curl -fsSL https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt > /valhalla/hosts.d/notracking.hosts
+0 0 * * * service dnsmasq restart
