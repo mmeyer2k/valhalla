@@ -5,14 +5,6 @@ $dir = __DIR__;
 $yaml = yaml_parse_file(__DIR__ . '/../config.yaml');
 
 switch ($command) {
-    case '3p':
-    case '3':
-        `curl -fsSL https://raw.githubusercontent.com/notracking/hosts-blocklists/master/domains.txt > /etc/dnsmasq.d/notracking`;
-
-        `curl -fsSL https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt > /valhalla/hosts.d/notracking.hosts`;
-
-        break;
-
     case 'log':
     case 'lo':
     case 'l':
