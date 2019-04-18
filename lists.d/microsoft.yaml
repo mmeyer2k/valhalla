@@ -34,6 +34,5 @@ whitelist:
   - answers.microsoft.com
   - docs.microsoft.com
   - developer.microsoft.com
-  - social.msdn.microsoft.com
-  - blogs.msdn.microsoft.com
+  - msdn.microsoft.com
   - visualstudio.microsoft.com
