@@ -261,6 +261,9 @@ function buildDnsmasqRules(string &$mode): string
     if ($mode === 'tight') {
         $rules[] = "address=/#/0.0.0.0";
     }
+    
+    # save a record of the last build mode
+    file_put_contents('/var/tmp/lastmode', $mode);
 
     return implode("\r\n", $rules);
 }
