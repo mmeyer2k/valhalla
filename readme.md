@@ -10,7 +10,7 @@ At its core, the primary functions of valhalla are:
 - to use continuously updated copies of the very good blocklists at [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) to block spam, ads, malware, telemetry and other garbage
 - to be able to run as a minimalist virtual machine for portability
 - to provide a robust commandline interface to control the system
-- to optionally send all outbound traffic through a socks5 proxy for end to end privacy
+- to optionally send all outbound traffic through a SOCKS5 proxy for end to end privacy
 
 The basic technology stack is: Ubuntu 18 + Dnsmasq + DNSCrypt + DNSSEC + Vagrant
 
