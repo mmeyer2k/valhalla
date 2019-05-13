@@ -9,8 +9,9 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
   config.vm.synced_folder "./", "/valhalla"
 
-  if settings.include? "ip"
-    config.vm.network "public_network", ip: settings["ip"]
+  if settings.include? "ip4"
+    config.vm.network "public_network", ip: settings["ip4"]
+    config.vm.network "public_network", ip: settings["ip6"]
   else
     config.vm.network "private_network", type: "dhcp"
     config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
