@@ -11,7 +11,6 @@ Vagrant.configure("2") do |config|
 
   if settings.include? "ip4"
     config.vm.network "public_network", ip: settings["ip4"]
-    config.vm.network "public_network", ip: settings["ip6"]
   else
     config.vm.network "private_network", type: "dhcp"
     config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
