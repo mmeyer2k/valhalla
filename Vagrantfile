@@ -13,8 +13,9 @@ Vagrant.configure("2") do |config|
     config.vm.network "public_network", ip: settings["ip4"]
   else
     config.vm.network "private_network", type: "dhcp"
-    config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
   end
+  
+  config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
 
   config.vm.provider :virtualbox do |vb|
     vb.gui = false
