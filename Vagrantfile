@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
+  config.vm.network "forwarded_port", guest: 22, host: 2288, protocol: "tcp"
 
   config.vm.provider :virtualbox do |vb|
     vb.gui = false
@@ -65,7 +66,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "configure ufw", path: "./system/firewall.sh"
 
   config.vm.provision "shell", name: "configure logrotate", inline: <<-SHELL
-    mkdir -p /var/log/dnsmasq ; chown dnsmasq:root /var/log/dnsmasq
+    mkdir -p /var/log/dnsmasq
+	chown dnsmasq:root /var/log/dnsmasq
     cp -f /valhalla/system/logrotate /etc/logrotate.d/dnsmasq
     chmod 644 /etc/logrotate.d/dnsmasq
   SHELL
@@ -89,8 +91,8 @@ Vagrant.configure("2") do |config|
     SHELL
   else
     config.vm.provision "shell", run: "always", name: "obtain bridge ips for display", inline: <<-SHELL
-      echo '127.0.0.1' > /var/tmp/ip4
-      echo '::1' > /var/tmp/ip6
+      echo 'none' > /var/tmp/ip4
+      echo 'none' > /var/tmp/ip6
     SHELL
   end
   
@@ -109,14 +111,19 @@ Vagrant.configure("2") do |config|
     figlet valhalla
     echo '*'
     echo '* build complete!'
-    echo "* please use 'vagrant ssh' to see the valhalla commandline options"
     echo '*'
     echo '* https://github.com/mmeyer2k/valhalla'
+	echo '*'
+	echo '* connect via SSH from host machine:'
+	echo '* ssh -p 2288 vagrant@127.0.0.1'
     echo '*'
-    echo '* ipv4 address:' $(cat /var/tmp/ip4)
-    echo '* ipv6 address:' $(cat /var/tmp/ip6)
+    echo '* public IPv4 DNS address: ' $(cat /var/tmp/ip4)
+    echo '* public IPv6 DNS address: ' $(cat /var/tmp/ip6)
     echo '*'
-    echo '* dns server port: 53'
+    echo '* host-only IPv4 DNS address: 127.0.0.1'
+    echo '* host-only IPv6 DNS address: ::1'
+    echo '*'
+    echo '* DNS server port: 53'
     echo '*'
   SHELL
 end
