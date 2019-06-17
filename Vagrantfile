@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
     byobu-enable
   SHELL
 
-  if settings.include? "ip"
+  if settings.include? "ip4"
     config.vm.provision "shell", run: "always", name: "obtain dhcp ips for display", inline: <<-SHELL
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
       ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link'  | cut -d' ' -f 2 > /var/tmp/ip6
