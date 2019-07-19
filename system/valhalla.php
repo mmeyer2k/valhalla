@@ -36,7 +36,7 @@ switch ($command) {
 
         colorLine('now tailing ' . $file . '...', 2);
 
-        passthru("tail -f $file");
+        passthru("multitail -f $file");
 
         break;
 
