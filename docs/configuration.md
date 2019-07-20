@@ -28,6 +28,3 @@ Amount of memory given to vagrant.
 
 ### `cpu`
 Number of cpu cores to give to vagrant.
-
-### `cpuexecutioncap`
-Limit the amount of CPU power available.

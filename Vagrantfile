@@ -23,12 +23,15 @@ Vagrant.configure("2") do |config|
     vb.gui = false
     vb.customize [
       "modifyvm", :id,
-      "--cpuexecutioncap", settings["cpuexecutioncap"],
       "--memory", settings["memory"],
       "--cpus", settings["cpus"],
       "--ostype", "Ubuntu_64"
     ]
   end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    ln -sf /valhalla/system/resolv.conf /etc/resolv.conf
+  SHELL
 
   config.vm.provision "shell", name: "setting up valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
@@ -91,12 +94,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  if settings.include? "ip4"
-    config.vm.provision "shell", run: "always", inline: <<-SHELL
-      echo 'none' > /var/tmp/ip4
-      echo 'none' > /var/tmp/ip6
-    SHELL
-  end
+  config.vm.provision "shell", run: "always", inline: <<-SHELL
+    echo 'none' > /var/tmp/ip4
+    echo 'none' > /var/tmp/ip6
+  SHELL
 
   if settings.include? "ip4"
     config.vm.provision "shell", run: "always", args: settings["ip4"], inline: <<-SHELL
