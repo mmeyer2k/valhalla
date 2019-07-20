@@ -9,12 +9,13 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
   config.vm.synced_folder "./", "/valhalla"
 
+  config.vm.network "private_network", type: "dhcp"
+
   if settings.include? "ip4"
     config.vm.network "public_network", ip: settings["ip4"]
-  else
-    config.vm.network "private_network", type: "dhcp"
   end
-  
+
+  config.vm.network "forwarded_port", guest: 80, host: 8888, protocol: "tcp"
   config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
   config.vm.network "forwarded_port", guest: 22, host: 2288, protocol: "tcp"
 
@@ -35,6 +36,12 @@ Vagrant.configure("2") do |config|
     apt install -y dnsmasq figlet libsodium-dev git dnscrypt-proxy libyaml-dev tor
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack multitail
     apt remove -y snapd
+  SHELL
+
+  config.vm.provision "shell", name: "installing nginx", inline: <<-SHELL
+    apt install -y nginx
+    service nginx enable
+    service nginx start
   SHELL
 
   config.vm.provision "shell", name: "installing php", inline: <<-SHELL
@@ -83,23 +90,26 @@ Vagrant.configure("2") do |config|
       s.args = [File.read(File.expand_path("~/.ssh/id_rsa.pub"))]
     end
   end
-  
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    byobu-enable
-  SHELL
 
   if settings.include? "ip4"
-    config.vm.provision "shell", run: "always", name: "obtain dhcp ips for display", inline: <<-SHELL
-      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'inet ' | cut -d' ' -f 2 > /var/tmp/ip4
-      ifconfig enp0s8 | awk '{$1=$1;print}' | grep 'link'  | cut -d' ' -f 2 > /var/tmp/ip6
-    SHELL
-  else
-    config.vm.provision "shell", run: "always", name: "obtain bridge ips for display", inline: <<-SHELL
+    config.vm.provision "shell", run: "always", inline: <<-SHELL
       echo 'none' > /var/tmp/ip4
       echo 'none' > /var/tmp/ip6
     SHELL
   end
-  
+
+  if settings.include? "ip4"
+    config.vm.provision "shell", run: "always", args: settings["ip4"], inline: <<-SHELL
+      echo $1 > /var/tmp/ip4
+    SHELL
+  end
+
+  if settings.include? "ip6"
+    config.vm.provision "shell", run: "always", args: settings["ip6"], inline: <<-SHELL
+      echo $1 > /var/tmp/ip6
+    SHELL
+  end
+
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
     # link bashrc file in repo to one in profile
     cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
@@ -108,8 +118,9 @@ Vagrant.configure("2") do |config|
     php /valhalla/system/valhalla.php 3p
     php /valhalla/system/valhalla.php build
 
-    # enable byobu for root user
+    # enable byobu for both users
     byobu-enable
+    sudo -u vagrant byobu-enable
 
     # display banner message
     figlet valhalla
@@ -121,11 +132,11 @@ Vagrant.configure("2") do |config|
 	echo '* connect via SSH from host machine:'
 	echo '* ssh -p 2288 vagrant@127.0.0.1'
     echo '*'
-    echo '* public IPv4 DNS address: ' $(cat /var/tmp/ip4)
-    echo '* public IPv6 DNS address: ' $(cat /var/tmp/ip6)
-    echo '*'
     echo '* host-only IPv4 DNS address: 127.0.0.1'
     echo '* host-only IPv6 DNS address: ::1'
+    echo '*'
+    echo '* public IPv4 DNS address: ' $(cat /var/tmp/ip4)
+    echo '* public IPv6 DNS address: ' $(cat /var/tmp/ip6)
     echo '*'
     echo '* DNS server port: 53'
     echo '*'
