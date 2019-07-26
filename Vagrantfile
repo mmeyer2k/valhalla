@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "setting up valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git dnscrypt-proxy libyaml-dev tor
+    apt install -y dnsmasq figlet libsodium-dev git dnscrypt-proxy libyaml-dev tor avahi-daemon
     apt install -y nload iftop nethogs htop nmap vnstat tcptrack multitail
     apt remove -y snapd
   SHELL
