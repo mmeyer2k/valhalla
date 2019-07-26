@@ -111,17 +111,23 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
+  config.vm.provision "shell", run: "always", name: "download third party block lists", inline: <<-SHELL
+    php /valhalla/system/valhalla.php 3p
+  SHELL
+
+  config.vm.provision "shell", name: "enable byobu at login", privileged: false, inline: <<-SHELL
+    byobu-enable
+  SHELL
+
   config.vm.provision "shell", run: "always", name: "finishing startup process", inline: <<-SHELL
     # link bashrc file in repo to one in profile
     cat /home/vagrant/.bashrc | grep valhalla || echo '. /valhalla/system/.bashrc' >> /home/vagrant/.bashrc
 	
     # build rulesets
-    php /valhalla/system/valhalla.php 3p
     php /valhalla/system/valhalla.php build
 
     # enable byobu for both users
     byobu-enable
-    sudo -u vagrant byobu-enable
 
     # display banner message
     figlet valhalla
