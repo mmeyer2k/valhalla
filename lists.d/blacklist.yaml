@@ -13,6 +13,7 @@ blacklist:
   # social media and large ecosystems i have no part of
   - facebook.com
   - facebook.net
+  - fb.com
   - twitter.com
   - tumblr.com
   - myspace.com
@@ -64,4 +65,5 @@ blacklist:
   - zendesk.com
   - wp.com
   - flurry.com
+  - drifft.com
 
