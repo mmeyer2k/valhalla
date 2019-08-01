@@ -15,6 +15,10 @@ Vagrant.configure("2") do |config|
     config.vm.network "public_network", ip: settings["ip4"]
   end
 
+  if settings.include? "ip6"
+    config.vm.network "public_network", ip: settings["ip6"]
+  end
+
   config.vm.network "forwarded_port", guest: 80, host: 8888, protocol: "tcp"
   config.vm.network "forwarded_port", guest: 53, host: 53, protocol: "udp"
   config.vm.network "forwarded_port", guest: 22, host: 2288, protocol: "tcp"
@@ -36,8 +40,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", name: "setting up valhalla", inline: <<-SHELL
     add-apt-repository ppa:shevchuk/dnscrypt-proxy
     apt update
-    apt install -y dnsmasq figlet libsodium-dev git dnscrypt-proxy libyaml-dev tor avahi-daemon
-    apt install -y nload iftop nethogs htop nmap vnstat tcptrack multitail
+    apt install -y dnsmasq figlet libsodium-dev git dnscrypt-proxy libyaml-dev tor
+    apt install -y iftop nethogs htop nmap tcptrack multitail
     apt remove -y snapd
   SHELL
 
@@ -112,10 +116,10 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", run: "always", name: "download third party block lists", inline: <<-SHELL
-    php /valhalla/system/valhalla.php 3p
+    sh /valhalla/system/3rdparty.sh
   SHELL
 
-  config.vm.provision "shell", name: "enable byobu at login", privileged: false, inline: <<-SHELL
+  config.vm.provision "shell", name: "enable byobu at login for vagrant user", privileged: false, inline: <<-SHELL
     byobu-enable
   SHELL
 
@@ -125,9 +129,6 @@ Vagrant.configure("2") do |config|
 	
     # build rulesets
     php /valhalla/system/valhalla.php build
-
-    # enable byobu for both users
-    byobu-enable
 
     # display banner message
     figlet valhalla
